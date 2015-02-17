@@ -12,6 +12,18 @@ var App = React.createClass({displayName: "App",
 
   render: function() {
     return React.createElement("div", null, 
+      React.createElement("h2", null, "Tree Menu 1"), 
+      React.createElement(TreeMenu, null, 
+        React.createElement(TreeNode, {label: "Option 1"}), 
+        React.createElement(TreeNode, {label: "Option 2"}, 
+          React.createElement(TreeNode, {label: "Option A", checkbox: true}), 
+          React.createElement(TreeNode, {label: "Option B", checkbox: true})
+        ), 
+        React.createElement(TreeNode, {label: "Option 3"}), 
+        React.createElement(TreeNode, {label: "Option 4"})
+      ), 
+
+      React.createElement("h2", null, "Tree Menu 2"), 
       React.createElement(TreeMenu, null, 
         React.createElement(TreeNode, {label: "Option 1"}), 
         React.createElement(TreeNode, {label: "Option 2"}, 
@@ -21,6 +33,7 @@ var App = React.createClass({displayName: "App",
         React.createElement(TreeNode, {label: "Option 3"}), 
         React.createElement(TreeNode, {label: "Option 4"})
       )
+
     );
 
   }
@@ -20052,7 +20065,8 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   propTypes : {
 
-    classNamePrefix: React.PropTypes.string
+    classNamePrefix: React.PropTypes.string,
+    stateful: React.PropTypes.bool
     //TODO: make sure children are of TreeNode type?
 
   },
