@@ -3,6 +3,12 @@ var React = require('react'),
   TreeMenu = require('../src/TreeMenu.jsx'),
   TreeNode = require('../src/TreeNode.jsx');
 
+  var dynamicTreeData = [
+  {label : "Option 1"},
+  {label : "Option 2", children : [{label: "Sub Option A"}]}
+  
+  ];
+
 var App = React.createClass({displayName: "App",
 
   getInitialState: function() {
@@ -24,15 +30,7 @@ var App = React.createClass({displayName: "App",
       ), 
 
       React.createElement("h2", null, "Tree Menu 2"), 
-      React.createElement(TreeMenu, null, 
-        React.createElement(TreeNode, {label: "Option 1"}), 
-        React.createElement(TreeNode, {label: "Option 2"}, 
-          React.createElement(TreeNode, {label: "Option A", checkbox: true}), 
-          React.createElement(TreeNode, {label: "Option B", checkbox: true})
-        ), 
-        React.createElement(TreeNode, {label: "Option 3"}), 
-        React.createElement(TreeNode, {label: "Option 4"})
-      )
+      React.createElement(TreeMenu, {data: dynamicTreeData})
 
     );
 
@@ -20057,6 +20055,8 @@ module.exports = require('./lib/React');
 
 },{"./lib/React":34}],166:[function(require,module,exports){
 var React = require('react/addons'),
+  TreeNode = require('./TreeNode.jsx'),
+  TreeNodeFactory = React.createFactory(TreeNode),
   TreeNodeMixin = require('./TreeNodeMixin');
 
 var TreeMenu = React.createClass({displayName: "TreeMenu",
@@ -20083,8 +20083,41 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
     return (
       React.createElement("div", {className: props.classNamePrefix + "-root"}, 
-        this.getTreeChildren()
+        this._getTreeNodes()
       ));
+
+  },
+
+  _getTreeNodes: function() {
+    
+    var props = this.props;
+
+    //invariant(!props.children || !props.data, "Either children or data props are expected in TreeMenu, but not both");
+
+    if (props.children) {
+      return this.getTreeChildren();
+    }
+
+    function dataToNodes(data) {
+
+      return data.map(function(dataForNode) {
+        var nodeProps = {
+          label : dataForNode.label
+        };
+
+        if (dataForNode.children) {
+          nodeProps.children = dataToNodes(dataForNode.children);
+        }
+
+        return TreeNodeFactory(nodeProps);
+
+      });
+
+    }
+
+    if (props.data) {
+      return dataToNodes(props.data);
+    }
 
   }
 
@@ -20093,7 +20126,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
 module.exports = TreeMenu;
 
-},{"./TreeNodeMixin":168,"react/addons":4}],167:[function(require,module,exports){
+},{"./TreeNode.jsx":167,"./TreeNodeMixin":168,"react/addons":4}],167:[function(require,module,exports){
 var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin');
 
