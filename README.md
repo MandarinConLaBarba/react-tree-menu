@@ -8,10 +8,9 @@ A stateless tree component with the following features:
 * Declarative tree menus
 * Built with the Flux proposal in mind (i.e. trickle-down state)
 
-## Please check out the demo.
+## Please check out the [Demo](http://mandarinconlabarba.github.io/react-tree-menu/example/index.html).
 
 ## Install
-
 
 ```
 npm install --save react-tree-menu
