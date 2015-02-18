@@ -10,6 +10,29 @@ A stateless tree component with the following features:
 
 ## Please check out the demo.
 
+## Install
+
+
+```
+npm install --save react-tree-menu
+```
+
+## General Usage
+
+```
+
+var TreeMenu = require('react-tree-menu').TreeMenu,
+    TreeNode = require('react-tree-menu').TreeNode;;
+
+    ...
+
+    <TreeMenu/>
+    <TreeMenu>
+        <TreeNode/>
+    </TreeMenu>
+
+```
+
 ## Declarative use
 
 In your `.render()` method, embed `TreeMenu`:
@@ -75,6 +98,53 @@ var data = [{
         data={data} />;
 
 ```
+
+## <TreeMenu/> Props
+
+### identifier
+
+The prop/field to use for the node identifier. Defaults to Array index
+
+### collapsible
+
+Whether or not nested <TreeNode/> components are collapsible
+
+### expandIconClass
+
+The CSS class to give the expand icon component
+
+### collapseIconClass
+
+The CSS class to give the collapse icon component
+
+### onTreeNodeClick
+
+Function handler for click events on <TreeNode /> components
+
+### onTreeNodeCollapseChange
+
+Function handler for collapse events on <TreeNode /> components
+
+### onTreeNodeCheckChange
+
+Function handler for checkbox change events on <TreeNode /> components
+
+### data
+
+The data to use when building <TreeNode/> components dynamically
+
+## <TreeNode /> Props
+
+## label
+
+The node label
+
+### checkbox
+
+Whether or not the node has a checkbox. If the node checkbox={true}, clicking on the label also fires the `onTreeNodeCheckChange` function
+
+
+
 
 
 
