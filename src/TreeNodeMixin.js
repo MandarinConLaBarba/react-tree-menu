@@ -2,18 +2,17 @@ var React = require('react/addons');
 
 var TreeNodeMixin = {
 
-  getTreeChildren : function () {
-    var props = this.props;
+  _getTreeNodeProps: function (rootProps, ancestor, isRootNode, childIndex) {
 
-    if (props.children) {
-      return React.Children.map(props.children, function (child) {
-        return React.addons.cloneWithProps(child, {
-          classNamePrefix : props.classNamePrefix
-        });
-      });
-    }
+    return {
+      classNamePrefix: rootProps.classNamePrefix,
+      ancestor: ancestor,
+      onClick: rootProps.onTreeNodeClick,
+      onCheckChange: rootProps.onTreeNodeCheckChange,
+      id: childIndex,
+      key: "tree-node-" + ancestor.join(".") + childIndex
+    };
 
-    //TODO: support a object/hash structure..
   }
 };
 

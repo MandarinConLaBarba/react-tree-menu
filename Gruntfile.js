@@ -3,18 +3,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     watch: {
-      jshint: {
-        files: 'src/**/*.js',
-        tasks: ['jshint']
-      },
-
-      jest: {
-        files: ['src/**/*.js', 'test/**/*.js'],
-        tasks: ['jest']
-      },
-
       browserify: {
-        files: ['src/**/*.js'],
+        files: ['src/**/*.js*', 'example/*.jsx'],
         tasks: ['browserify']
       }
     },

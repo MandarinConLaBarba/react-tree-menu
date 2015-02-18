@@ -12,10 +12,14 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jest": "^0.1.2",
     "jest-cli": "^0.2.2",
+    "lodash": "^3.2.0",
+    "object-assign": "^2.0.0",
     "react": "^0.12.2",
     "reactify": "^1.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "immutable": "^3.6.2"
+  },
   "scripts": {
     "test": "jest"
   },
