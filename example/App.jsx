@@ -52,7 +52,10 @@ var App = React.createClass({
 
     return <div>
       <h2>Tree Menu 1</h2>
-      <TreeMenu onTreeNodeClick={this._handleTreeNodeClick}>
+      <TreeMenu
+        onTreeNodeClick={this._handleTreeNodeClick}
+        expandIconClass="fa fa-chevron-right"
+        collapseIconClass="fa fa-chevron-down">
         <TreeNode label="Option 1"/>
         <TreeNode label="Option 2">
           <TreeNode label="Option A" checkbox={true} />
@@ -69,8 +72,12 @@ var App = React.createClass({
     return <div>
       <h2>Tree Menu 2</h2>
       <TreeMenu
+        expandIconClass="fa fa-chevron-right"
+        collapseIconClass="fa fa-chevron-down"
         onTreeNodeClick={this._handleTreeNodeClick}
-        onTreeNodeCheckChange={this._handleDynamicTreeNodeCheckChange} data={this.state.dynamicTreeData} />
+        onTreeNodeCollapseChange={this._handleDynamicTreeNodePropChange.bind(this, "collapsed")}
+        onTreeNodeCheckChange={this._handleDynamicTreeNodePropChange.bind(this, "checked")}
+        data={this.state.dynamicTreeData} />
     </div>;
 
   },
@@ -79,16 +86,18 @@ var App = React.createClass({
     console.log("App Handler: " + lineage.join(" > "));
   },
 
-  _handleDynamicTreeNodeCheckChange: function (lineage) {
+  _handleDynamicTreeNodePropChange: function (propName, lineage) {
+
+    //TODO: figure out how to use immutable API here..
 
     var thisComponent = this;
 
-    function setCheckState(node, checked) {
-      node.checked = checked;
+    function setPropState(node, value) {
+      node[propName] = value;
       var children = node.children;
       if (children) {
         node.children.forEach(function (childNode, ci) {
-          setCheckState(childNode, checked);
+          setPropState(childNode, value);
         });
       }
     }
@@ -99,7 +108,7 @@ var App = React.createClass({
       state.forEach(function (node, i) {
         if (i === id) {
           if (!lineage.length) {
-            setCheckState(state[i], !state[i].checked);
+            setPropState(state[i], !state[i][propName]);
           } else {
             state[i].children = getUpdatedTreeState(state[i].children);
           }

@@ -11,24 +11,31 @@ var TreeMenu = React.createClass({
     checkbox: React.PropTypes.bool,
     collapsible : React.PropTypes.bool,
     collapsed : React.PropTypes.bool,
+    expandIconClass: React.PropTypes.string,
+    collapseIconClass: React.PropTypes.string,
     checked: React.PropTypes.bool,
     label: React.PropTypes.string,
     classNamePrefix: React.PropTypes.string,
     toggleable: React.PropTypes.bool,
     onClick: React.PropTypes.func,
-    onCheckChange: React.PropTypes.func
+    onCheckChange: React.PropTypes.func,
+    onCollapseChange: React.PropTypes.func
 
   },
 
   getDefaultProps: function () {
     return {
       collapsible: true,
+      collapsed: false,
       checkbox : false,
       onClick: function(lineage) {
         console.log("Tree Node clicked: " + lineage.join(" > "));
       },
       onCheckChange: function (lineage) {
         console.log("Tree Node indicating a checkbox should change: " + lineage.join(" > "));
+      },
+      onCollapseChange: function (lineage) {
+        console.log("Tree Node indicating collapse state should change: " + lineage.join(" > "));
       },
       checked : false
     }
@@ -40,9 +47,10 @@ var TreeMenu = React.createClass({
       collapseNode = null,
       rootClass = this._getRootCssClass();
 
-    if (props.collapsible) {
-      var collapseClassName = rootClass + "-collapse-toggle " + props.collapsed ? "collapsed" : "expanded";
-      collapseNode = <span className={collapseClassName}></span>
+    if (props.collapsible && props.children && props.children.length) {
+      var collapseClassName = rootClass + "-collapse-toggle " +
+        (props.collapsed ? props.expandIconClass : props.collapseIconClass);
+      collapseNode = <span onClick={this._handleCollapseChange} className={collapseClassName}></span>
     }
 
     return (
@@ -63,8 +71,6 @@ var TreeMenu = React.createClass({
     var props = this.props;
 
     if (props.collapsible && props.collapsed) return null;
-
-    //TODO - add in CSSTransitionGroup?
 
     return (
       <div className={this._getRootCssClass() + "-children"}>
@@ -98,7 +104,7 @@ var TreeMenu = React.createClass({
       onChange={noop}/>;
   },
 
-  _handleClick: function (e) {
+  _handleClick: function () {
     if (this.props.checkbox) {
       return this._handleCheckChange();
     }
@@ -107,10 +113,14 @@ var TreeMenu = React.createClass({
 
   },
 
-  _handleCheckChange: function (e) {
+  _handleCheckChange: function () {
 
     this.props.onCheckChange(this._getLineage());
 
+  },
+
+  _handleCollapseChange: function () {
+    this.props.onCollapseChange(this._getLineage());
   },
 
   _getLineage: function () {

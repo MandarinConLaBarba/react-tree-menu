@@ -53,7 +53,10 @@ var App = React.createClass({displayName: "App",
 
     return React.createElement("div", null, 
       React.createElement("h2", null, "Tree Menu 1"), 
-      React.createElement(TreeMenu, {onTreeNodeClick: this._handleTreeNodeClick}, 
+      React.createElement(TreeMenu, {
+        onTreeNodeClick: this._handleTreeNodeClick, 
+        expandIconClass: "fa fa-chevron-right", 
+        collapseIconClass: "fa fa-chevron-down"}, 
         React.createElement(TreeNode, {label: "Option 1"}), 
         React.createElement(TreeNode, {label: "Option 2"}, 
           React.createElement(TreeNode, {label: "Option A", checkbox: true}), 
@@ -70,8 +73,12 @@ var App = React.createClass({displayName: "App",
     return React.createElement("div", null, 
       React.createElement("h2", null, "Tree Menu 2"), 
       React.createElement(TreeMenu, {
+        expandIconClass: "fa fa-chevron-right", 
+        collapseIconClass: "fa fa-chevron-down", 
         onTreeNodeClick: this._handleTreeNodeClick, 
-        onTreeNodeCheckChange: this._handleDynamicTreeNodeCheckChange, data: this.state.dynamicTreeData})
+        onTreeNodeCollapseChange: this._handleDynamicTreeNodePropChange.bind(this, "collapsed"), 
+        onTreeNodeCheckChange: this._handleDynamicTreeNodePropChange.bind(this, "checked"), 
+        data: this.state.dynamicTreeData})
     );
 
   },
@@ -80,16 +87,18 @@ var App = React.createClass({displayName: "App",
     console.log("App Handler: " + lineage.join(" > "));
   },
 
-  _handleDynamicTreeNodeCheckChange: function (lineage) {
+  _handleDynamicTreeNodePropChange: function (propName, lineage) {
+
+    //TODO: figure out how to use immutable API here..
 
     var thisComponent = this;
 
-    function setCheckState(node, checked) {
-      node.checked = checked;
+    function setPropState(node, value) {
+      node[propName] = value;
       var children = node.children;
       if (children) {
         node.children.forEach(function (childNode, ci) {
-          setCheckState(childNode, checked);
+          setPropState(childNode, value);
         });
       }
     }
@@ -100,7 +109,7 @@ var App = React.createClass({displayName: "App",
       state.forEach(function (node, i) {
         if (i === id) {
           if (!lineage.length) {
-            setCheckState(state[i], !state[i].checked);
+            setPropState(state[i], !state[i][propName]);
           } else {
             state[i].children = getUpdatedTreeState(state[i].children);
           }
@@ -21857,24 +21866,31 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     checkbox: React.PropTypes.bool,
     collapsible : React.PropTypes.bool,
     collapsed : React.PropTypes.bool,
+    expandIconClass: React.PropTypes.string,
+    collapseIconClass: React.PropTypes.string,
     checked: React.PropTypes.bool,
     label: React.PropTypes.string,
     classNamePrefix: React.PropTypes.string,
     toggleable: React.PropTypes.bool,
     onClick: React.PropTypes.func,
-    onCheckChange: React.PropTypes.func
+    onCheckChange: React.PropTypes.func,
+    onCollapseChange: React.PropTypes.func
 
   },
 
   getDefaultProps: function () {
     return {
       collapsible: true,
+      collapsed: false,
       checkbox : false,
       onClick: function(lineage) {
         console.log("Tree Node clicked: " + lineage.join(" > "));
       },
       onCheckChange: function (lineage) {
         console.log("Tree Node indicating a checkbox should change: " + lineage.join(" > "));
+      },
+      onCollapseChange: function (lineage) {
+        console.log("Tree Node indicating collapse state should change: " + lineage.join(" > "));
       },
       checked : false
     }
@@ -21886,9 +21902,10 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
       collapseNode = null,
       rootClass = this._getRootCssClass();
 
-    if (props.collapsible) {
-      var collapseClassName = rootClass + "-collapse-toggle " + props.collapsed ? "collapsed" : "expanded";
-      collapseNode = React.createElement("span", {className: collapseClassName})
+    if (props.collapsible && props.children && props.children.length) {
+      var collapseClassName = rootClass + "-collapse-toggle " +
+        (props.collapsed ? props.expandIconClass : props.collapseIconClass);
+      collapseNode = React.createElement("span", {onClick: this._handleCollapseChange, className: collapseClassName})
     }
 
     return (
@@ -21909,8 +21926,6 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     var props = this.props;
 
     if (props.collapsible && props.collapsed) return null;
-
-    //TODO - add in CSSTransitionGroup?
 
     return (
       React.createElement("div", {className: this._getRootCssClass() + "-children"}, 
@@ -21944,7 +21959,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
       onChange: noop});
   },
 
-  _handleClick: function (e) {
+  _handleClick: function () {
     if (this.props.checkbox) {
       return this._handleCheckChange();
     }
@@ -21953,10 +21968,14 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   },
 
-  _handleCheckChange: function (e) {
+  _handleCheckChange: function () {
 
     this.props.onCheckChange(this._getLineage());
 
+  },
+
+  _handleCollapseChange: function () {
+    this.props.onCollapseChange(this._getLineage());
   },
 
   _getLineage: function () {
@@ -21977,11 +21996,16 @@ var TreeNodeMixin = {
 
   _getTreeNodeProps: function (rootProps, ancestor, isRootNode, childIndex) {
 
+    //TODO: use omit/pick to clean this up
+
     return {
       classNamePrefix: rootProps.classNamePrefix,
+      collapseIconClass: rootProps.collapseIconClass,
+      expandIconClass: rootProps.expandIconClass,
       ancestor: ancestor,
       onClick: rootProps.onTreeNodeClick,
       onCheckChange: rootProps.onTreeNodeCheckChange,
+      onCollapseChange: rootProps.onTreeNodeCollapseChange,
       id: childIndex,
       key: "tree-node-" + ancestor.join(".") + childIndex
     };
