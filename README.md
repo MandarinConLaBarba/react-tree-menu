@@ -135,7 +135,7 @@ The data to use when building <TreeNode/> components dynamically
 
 ## <TreeNode /> Props
 
-## label
+### label
 
 The node label
 
