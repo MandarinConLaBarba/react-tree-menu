@@ -21814,7 +21814,13 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
   propTypes : {
 
     classNamePrefix: React.PropTypes.string,
-    stateful: React.PropTypes.bool
+    identifier: React.PropTypes.string,
+    onTreeNodeClick: React.PropTypes.func,
+    onTreeNodeCheckChange: React.PropTypes.func,
+    collapsible: React.PropTypes.bool,
+    expandIconClass: React.PropTypes.string,
+    collapseIconClass: React.PropTypes.string,
+    data: React.PropTypes.array
     //TODO: make sure children are of TreeNode type?
 
   },
@@ -21836,6 +21842,13 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   },
 
+  /**
+   * Gets data from declarative TreeMenu nodes
+   *
+   * @param children
+   * @returns {*}
+   * @private
+   */
   _getDataFromChildren: function (children) {
 
     var self = this;
@@ -21851,12 +21864,19 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     });
   },
 
+  /**
+   * Get TreeNode instances for render()
+   *
+   * @returns {*}
+   * @private
+   */
   _getTreeNodes: function() {
     
     var treeMenuProps = this.props,
       treeData;
 
-    invariant(!treeMenuProps.children || !treeMenuProps.data, "Either children or data props are expected in TreeMenu, but not both");
+    invariant(!treeMenuProps.children || !treeMenuProps.data,
+      "Either children or data props are expected in TreeMenu, but not both");
 
     if (treeMenuProps.children) {
       treeData = this._getDataFromChildren(treeMenuProps.children);
@@ -21875,14 +21895,15 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
       }
 
       return data.map(function(dataForNode, i) {
-        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange"]),
+
+        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange", ""]),
           children = [];
 
         if (dataForNode.children) {
           children = dataToNodes(dataForNode.children, ancestor.concat(thisComponent.getNodeId(treeMenuProps, nodeProps, i)));
         }
 
-        nodeProps = assign(nodeProps, thisComponent._getTreeNodeProps(treeMenuProps, nodeProps, ancestor, isRootNode, i));
+        nodeProps = assign(nodeProps, thisComponent.getTreeNodeProps(treeMenuProps, nodeProps, ancestor, isRootNode, i));
 
         return TreeNodeFactory(nodeProps, children);
 
@@ -21957,7 +21978,7 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
-var TreeMenu = React.createClass({displayName: "TreeMenu",
+var TreeNode = React.createClass({displayName: "TreeNode",
 
   mixins : [TreeNodeMixin],
 
@@ -21969,9 +21990,8 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     expandIconClass: React.PropTypes.string,
     collapseIconClass: React.PropTypes.string,
     checked: React.PropTypes.bool,
-    label: React.PropTypes.string,
+    label: React.PropTypes.string.isRequired,
     classNamePrefix: React.PropTypes.string,
-    toggleable: React.PropTypes.bool,
     onClick: React.PropTypes.func,
     onCheckChange: React.PropTypes.func,
     onCollapseChange: React.PropTypes.func
@@ -22093,14 +22113,25 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 });
 
 
-module.exports = TreeMenu;
+module.exports = TreeNode;
 
 },{"./TreeNodeMixin":214,"lodash/utility/noop":47,"react":210}],214:[function(require,module,exports){
 var React = require('react/addons');
 
 var TreeNodeMixin = {
 
-  _getTreeNodeProps: function (rootProps, props, ancestor, isRootNode, childIndex) {
+  /**
+   * Build the properties necessary for the TreeNode instance
+   *
+   * @param rootProps
+   * @param props
+   * @param ancestor
+   * @param isRootNode
+   * @param childIndex
+   * @returns {{classNamePrefix: (*|TreeMenu.propTypes.classNamePrefix|TreeMenu.getDefaultProps.classNamePrefix|TreeNodeMixin._getTreeNodeProps.classNamePrefix), collapseIconClass: (*|TreeMenu.propTypes.collapseIconClass|App._getStaticTreeExample.collapseIconClass|App._getDynamicTreeExample.collapseIconClass|TreeNodeMixin._getTreeNodeProps.collapseIconClass), expandIconClass: (*|TreeMenu.propTypes.expandIconClass|App._getStaticTreeExample.expandIconClass|App._getDynamicTreeExample.expandIconClass|TreeNodeMixin._getTreeNodeProps.expandIconClass), collapsible: (*|TreeMenu.propTypes.collapsible|TreeMenu.getDefaultProps.collapsible|App._getStaticTreeExample.collapsible|TreeNodeMixin._getTreeNodeProps.collapsible), ancestor: *, onClick: (TreeMenu.propTypes.onTreeNodeClick|*|App._getStaticTreeExample.onTreeNodeClick|App._getDynamicTreeExample.onTreeNodeClick), onCheckChange: (TreeMenu.propTypes.onTreeNodeCheckChange|*|App._getStaticTreeExample.onTreeNodeCheckChange|App._getDynamicTreeExample.onTreeNodeCheckChange), onCollapseChange: (App._getDynamicTreeExample.onTreeNodeCollapseChange|*), id: *, key: string}}
+   * @private
+   */
+  getTreeNodeProps: function (rootProps, props, ancestor, isRootNode, childIndex) {
 
     //TODO: use omit/pick to clean this up
 

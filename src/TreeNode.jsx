@@ -2,7 +2,7 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
-var TreeMenu = React.createClass({
+var TreeNode = React.createClass({
 
   mixins : [TreeNodeMixin],
 
@@ -14,9 +14,8 @@ var TreeMenu = React.createClass({
     expandIconClass: React.PropTypes.string,
     collapseIconClass: React.PropTypes.string,
     checked: React.PropTypes.bool,
-    label: React.PropTypes.string,
+    label: React.PropTypes.string.isRequired,
     classNamePrefix: React.PropTypes.string,
-    toggleable: React.PropTypes.bool,
     onClick: React.PropTypes.func,
     onCheckChange: React.PropTypes.func,
     onCollapseChange: React.PropTypes.func
@@ -138,4 +137,4 @@ var TreeMenu = React.createClass({
 });
 
 
-module.exports = TreeMenu;
+module.exports = TreeNode;
