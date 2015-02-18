@@ -47,10 +47,16 @@ var TreeMenu = React.createClass({
       collapseNode = null,
       rootClass = this._getRootCssClass();
 
-    if (props.collapsible && props.children && props.children.length) {
-      var collapseClassName = rootClass + "-collapse-toggle " +
-        (props.collapsed ? props.expandIconClass : props.collapseIconClass);
-      collapseNode = <span onClick={this._handleCollapseChange} className={collapseClassName}></span>
+    if (props.collapsible) {
+      var collapseClassName = rootClass + "-collapse-toggle ";
+      var collapseToggleHandler = this._handleCollapseChange;
+      if (!props.children || props.children.length === 0) {
+        collapseToggleHandler = noop;
+        collapseClassName += "collapse-spacer";
+      } else {
+        collapseClassName += (props.collapsed ? props.expandIconClass : props.collapseIconClass);
+      }
+      collapseNode = <span onClick={collapseToggleHandler} className={collapseClassName}></span>
     }
 
     return (

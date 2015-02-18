@@ -6,6 +6,7 @@ var App = React.createClass({
 
   getInitialState: function() {
     return {
+      lastAction: null,
       dynamicTreeData: [
         {
           label : "Option 1"
@@ -38,11 +39,42 @@ var App = React.createClass({
   },
 
   render: function() {
-    return <div>
 
-      {this._getStaticTreeExample()}
+    var lastActionNode = <div>Interact with the tree views on the left..</div>;
 
-      {this._getDynamicTreeExample()}
+    if (this.state.lastAction) {
+      lastActionNode = (
+        <div>
+          Received event <strong>{this.state.lastAction.event}</strong> for node <strong>{this.state.lastAction.node}</strong>!
+        </div>);
+    }
+    return <div className="container">
+
+      <div className="row">
+        <div className="col-lg-4">
+          <div className="row">
+            <div className="col-lg-12">
+              {this._getStaticTreeExample()}
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-lg-12">
+              {this._getDynamicTreeExample()}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-lg-8">
+          <div className="row" style={{marginTop : 100}}>
+            <div className="alert alert-success tree-event-alert">
+              {lastActionNode}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
 
     </div>;
 
@@ -53,16 +85,19 @@ var App = React.createClass({
     return <div>
       <h2>Tree Menu 1</h2>
       <TreeMenu
-        onTreeNodeClick={this._handleTreeNodeClick}
+        identifier={"id"}
+        onTreeNodeClick={this._setLastActionState.bind(this, "clicked")}
+        onTreeNodeCheckChange={this._setLastActionState.bind(this, "checked")}
+        collapsible={false}
         expandIconClass="fa fa-chevron-right"
         collapseIconClass="fa fa-chevron-down">
-        <TreeNode label="Option 1"/>
-        <TreeNode label="Option 2">
-          <TreeNode label="Option A" checkbox={true} />
-          <TreeNode label="Option B" checkbox={true} />
+        <TreeNode label="Option 1" id="option_1"/>
+        <TreeNode label="Option 2" collapsible={false} id="option_2">
+          <TreeNode label="Option A" checkbox={true} id="option_2.a"/>
+          <TreeNode label="Option B" checkbox={true} id="option_2.b"/>
         </TreeNode>
-        <TreeNode label="Option 3"/>
-        <TreeNode label="Option 4"/>
+        <TreeNode label="Option 3" id="option_3"/>
+        <TreeNode label="Option 4" id="option_4"/>
       </TreeMenu>
     </div>;
   },
@@ -74,7 +109,7 @@ var App = React.createClass({
       <TreeMenu
         expandIconClass="fa fa-chevron-right"
         collapseIconClass="fa fa-chevron-down"
-        onTreeNodeClick={this._handleTreeNodeClick}
+        onTreeNodeClick={this._setLastActionState.bind(this, "clicked")}
         onTreeNodeCollapseChange={this._handleDynamicTreeNodePropChange.bind(this, "collapsed")}
         onTreeNodeCheckChange={this._handleDynamicTreeNodePropChange.bind(this, "checked")}
         data={this.state.dynamicTreeData} />
@@ -82,13 +117,11 @@ var App = React.createClass({
 
   },
 
-  _handleTreeNodeClick : function (lineage) {
-    console.log("App Handler: " + lineage.join(" > "));
-  },
-
   _handleDynamicTreeNodePropChange: function (propName, lineage) {
 
     //TODO: figure out how to use immutable API here..
+
+    this._setLastActionState(propName, lineage);
 
     var thisComponent = this;
 
@@ -121,6 +154,16 @@ var App = React.createClass({
 
     this.setState(getUpdatedTreeState());
 
+  },
+
+  _setLastActionState: function (action, node) {
+    console.log("Controller View received tree menu " + action + " action: " + node.join(" > "));
+    this.setState({
+      lastAction: {
+        event: action,
+        node: node.join(" > ")
+      }
+    })
   }
 });
 

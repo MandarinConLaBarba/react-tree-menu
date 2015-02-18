@@ -3,6 +3,25 @@
     margin-left: 10px;
 }
 
+.tree-view-node-collapse-toggle.collapse-spacer {
+    width: 14px;
+    display: inline-block;
+}
+
 .tree-view-node-collapse-toggle {
+    margin-right: 3px;
+    width: 14px;
+}
+
+.tree-view-node-label {
+    margin-left: 3px;
+}
+
+.tree-event-alert {
+    font-size: 18px;
+}
+
+.tree-event-alert strong {
+    font-size: 22px;
 }
 

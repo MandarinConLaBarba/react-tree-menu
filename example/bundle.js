@@ -7,6 +7,7 @@ var App = React.createClass({displayName: "App",
 
   getInitialState: function() {
     return {
+      lastAction: null,
       dynamicTreeData: [
         {
           label : "Option 1"
@@ -39,11 +40,42 @@ var App = React.createClass({displayName: "App",
   },
 
   render: function() {
-    return React.createElement("div", null, 
 
-      this._getStaticTreeExample(), 
+    var lastActionNode = React.createElement("div", null, "Interact with the tree views on the left..");
 
-      this._getDynamicTreeExample()
+    if (this.state.lastAction) {
+      lastActionNode = (
+        React.createElement("div", null, 
+          "Received event ", React.createElement("strong", null, this.state.lastAction.event), " for node ", React.createElement("strong", null, this.state.lastAction.node), "!"
+        ));
+    }
+    return React.createElement("div", {className: "container"}, 
+
+      React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-lg-4"}, 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-lg-12"}, 
+              this._getStaticTreeExample()
+            )
+          ), 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-lg-12"}, 
+              this._getDynamicTreeExample()
+            )
+          )
+        ), 
+
+        React.createElement("div", {className: "col-lg-8"}, 
+          React.createElement("div", {className: "row", style: {marginTop : 100}}, 
+            React.createElement("div", {className: "alert alert-success tree-event-alert"}, 
+              lastActionNode
+            )
+          )
+        )
+
+      )
+
+
 
     );
 
@@ -54,16 +86,19 @@ var App = React.createClass({displayName: "App",
     return React.createElement("div", null, 
       React.createElement("h2", null, "Tree Menu 1"), 
       React.createElement(TreeMenu, {
-        onTreeNodeClick: this._handleTreeNodeClick, 
+        identifier: "id", 
+        onTreeNodeClick: this._setLastActionState.bind(this, "clicked"), 
+        onTreeNodeCheckChange: this._setLastActionState.bind(this, "checked"), 
+        collapsible: false, 
         expandIconClass: "fa fa-chevron-right", 
         collapseIconClass: "fa fa-chevron-down"}, 
-        React.createElement(TreeNode, {label: "Option 1"}), 
-        React.createElement(TreeNode, {label: "Option 2"}, 
-          React.createElement(TreeNode, {label: "Option A", checkbox: true}), 
-          React.createElement(TreeNode, {label: "Option B", checkbox: true})
+        React.createElement(TreeNode, {label: "Option 1", id: "option_1"}), 
+        React.createElement(TreeNode, {label: "Option 2", collapsible: false, id: "option_2"}, 
+          React.createElement(TreeNode, {label: "Option A", checkbox: true, id: "option_2.a"}), 
+          React.createElement(TreeNode, {label: "Option B", checkbox: true, id: "option_2.b"})
         ), 
-        React.createElement(TreeNode, {label: "Option 3"}), 
-        React.createElement(TreeNode, {label: "Option 4"})
+        React.createElement(TreeNode, {label: "Option 3", id: "option_3"}), 
+        React.createElement(TreeNode, {label: "Option 4", id: "option_4"})
       )
     );
   },
@@ -75,7 +110,7 @@ var App = React.createClass({displayName: "App",
       React.createElement(TreeMenu, {
         expandIconClass: "fa fa-chevron-right", 
         collapseIconClass: "fa fa-chevron-down", 
-        onTreeNodeClick: this._handleTreeNodeClick, 
+        onTreeNodeClick: this._setLastActionState.bind(this, "clicked"), 
         onTreeNodeCollapseChange: this._handleDynamicTreeNodePropChange.bind(this, "collapsed"), 
         onTreeNodeCheckChange: this._handleDynamicTreeNodePropChange.bind(this, "checked"), 
         data: this.state.dynamicTreeData})
@@ -83,13 +118,11 @@ var App = React.createClass({displayName: "App",
 
   },
 
-  _handleTreeNodeClick : function (lineage) {
-    console.log("App Handler: " + lineage.join(" > "));
-  },
-
   _handleDynamicTreeNodePropChange: function (propName, lineage) {
 
     //TODO: figure out how to use immutable API here..
+
+    this._setLastActionState(propName, lineage);
 
     var thisComponent = this;
 
@@ -122,6 +155,16 @@ var App = React.createClass({displayName: "App",
 
     this.setState(getUpdatedTreeState());
 
+  },
+
+  _setLastActionState: function (action, node) {
+    console.log("Controller View received tree menu " + action + " action: " + node.join(" > "));
+    this.setState({
+      lastAction: {
+        event: action,
+        node: node.join(" > ")
+      }
+    })
   }
 });
 
@@ -21804,15 +21847,15 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   _getTreeNodes: function() {
     
-    var props = this.props,
+    var treeMenuProps = this.props,
       treeData;
 
-    invariant(!props.children || !props.data, "Either children or data props are expected in TreeMenu, but not both");
+    invariant(!treeMenuProps.children || !treeMenuProps.data, "Either children or data props are expected in TreeMenu, but not both");
 
-    if (props.children) {
-      treeData = this._getDataFromChildren(props.children);
+    if (treeMenuProps.children) {
+      treeData = this._getDataFromChildren(treeMenuProps.children);
     } else {
-      treeData = props.data;
+      treeData = treeMenuProps.data;
     }
 
     var thisComponent = this;
@@ -21830,10 +21873,10 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
           children = [];
 
         if (dataForNode.children) {
-          children = dataToNodes(dataForNode.children, ancestor.concat(i));
+          children = dataToNodes(dataForNode.children, ancestor.concat(thisComponent.getNodeId(treeMenuProps, nodeProps, i)));
         }
 
-        nodeProps = assign(nodeProps, thisComponent._getTreeNodeProps(props, ancestor, isRootNode, i));
+        nodeProps = assign(nodeProps, thisComponent._getTreeNodeProps(treeMenuProps, nodeProps, ancestor, isRootNode, i));
 
         return TreeNodeFactory(nodeProps, children);
 
@@ -21902,10 +21945,16 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
       collapseNode = null,
       rootClass = this._getRootCssClass();
 
-    if (props.collapsible && props.children && props.children.length) {
-      var collapseClassName = rootClass + "-collapse-toggle " +
-        (props.collapsed ? props.expandIconClass : props.collapseIconClass);
-      collapseNode = React.createElement("span", {onClick: this._handleCollapseChange, className: collapseClassName})
+    if (props.collapsible) {
+      var collapseClassName = rootClass + "-collapse-toggle ";
+      var collapseToggleHandler = this._handleCollapseChange;
+      if (!props.children || props.children.length === 0) {
+        collapseToggleHandler = noop;
+        collapseClassName += "collapse-spacer";
+      } else {
+        collapseClassName += (props.collapsed ? props.expandIconClass : props.collapseIconClass);
+      }
+      collapseNode = React.createElement("span", {onClick: collapseToggleHandler, className: collapseClassName})
     }
 
     return (
@@ -21994,7 +22043,7 @@ var React = require('react/addons');
 
 var TreeNodeMixin = {
 
-  _getTreeNodeProps: function (rootProps, ancestor, isRootNode, childIndex) {
+  _getTreeNodeProps: function (rootProps, props, ancestor, isRootNode, childIndex) {
 
     //TODO: use omit/pick to clean this up
 
@@ -22002,14 +22051,19 @@ var TreeNodeMixin = {
       classNamePrefix: rootProps.classNamePrefix,
       collapseIconClass: rootProps.collapseIconClass,
       expandIconClass: rootProps.expandIconClass,
+      collapsible: rootProps.collapsible,
       ancestor: ancestor,
       onClick: rootProps.onTreeNodeClick,
       onCheckChange: rootProps.onTreeNodeCheckChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
-      id: childIndex,
+      id: this.getNodeId(rootProps, props, childIndex),
       key: "tree-node-" + ancestor.join(".") + childIndex
     };
 
+  },
+
+  getNodeId: function (rootProps, props, childIndex) {
+    return rootProps.identifier && props[rootProps.identifier] ? props[rootProps.identifier] : childIndex;
   }
 };
 

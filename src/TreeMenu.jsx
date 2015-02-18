@@ -53,15 +53,15 @@ var TreeMenu = React.createClass({
 
   _getTreeNodes: function() {
     
-    var props = this.props,
+    var treeMenuProps = this.props,
       treeData;
 
-    invariant(!props.children || !props.data, "Either children or data props are expected in TreeMenu, but not both");
+    invariant(!treeMenuProps.children || !treeMenuProps.data, "Either children or data props are expected in TreeMenu, but not both");
 
-    if (props.children) {
-      treeData = this._getDataFromChildren(props.children);
+    if (treeMenuProps.children) {
+      treeData = this._getDataFromChildren(treeMenuProps.children);
     } else {
-      treeData = props.data;
+      treeData = treeMenuProps.data;
     }
 
     var thisComponent = this;
@@ -79,10 +79,10 @@ var TreeMenu = React.createClass({
           children = [];
 
         if (dataForNode.children) {
-          children = dataToNodes(dataForNode.children, ancestor.concat(i));
+          children = dataToNodes(dataForNode.children, ancestor.concat(thisComponent.getNodeId(treeMenuProps, nodeProps, i)));
         }
 
-        nodeProps = assign(nodeProps, thisComponent._getTreeNodeProps(props, ancestor, isRootNode, i));
+        nodeProps = assign(nodeProps, thisComponent._getTreeNodeProps(treeMenuProps, nodeProps, ancestor, isRootNode, i));
 
         return TreeNodeFactory(nodeProps, children);
 
