@@ -85,7 +85,7 @@ var App = React.createClass({
       <h2>Tree Menu (Declarative)</h2>
       <ul>
         <li>This menu is built w/ nested TreeNode components</li>
-        <li>It <u>is not</u> bound to state, so clicking on TreeNode components doesn't UI mutate state.</li>
+        <li>It <u>is not</u> bound to state, so clicking on TreeNode components doesn't mutate UI state.</li>
         <li>It has collapsible=false, so no expand/collapse icons show</li>
         <li>It has identifier="id", so it uses the 'id' prop when emitting events</li>
       </ul>
@@ -119,7 +119,7 @@ var App = React.createClass({
       <h2>Tree Menu (Dynamic)</h2>
       <ul>
         <li>This menu is built dynamically using the data prop</li>
-        <li>It <u>is</u> bound to state, so clicking on TreeNode components does UI mutate state.</li>
+        <li>It <u>is</u> bound to state, so clicking on TreeNode components does mutate UI state.</li>
         <li>It is collapsible (the default), so expand/collapse icons show</li>
         <li>It has no identifier prop for the TreeMenu, so it uses the array index when emitting events</li>
       </ul>
