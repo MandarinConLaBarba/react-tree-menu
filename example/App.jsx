@@ -1,6 +1,7 @@
 var React = require('react'),
-  TreeMenu = require('../src/TreeMenu.jsx'),
-  TreeNode = require('../src/TreeNode.jsx');
+  TreeMenu = require('../index').TreeMenu,
+  TreeNode = require('../index').TreeNode,
+  TreeMenuUtils = require('../index').Utils;
 
 var App = React.createClass({
 
@@ -140,40 +141,9 @@ var App = React.createClass({
 
   _handleDynamicTreeNodePropChange: function (propName, lineage) {
 
-    //TODO: figure out how to use immutable API here..
-
     this._setLastActionState(propName, lineage);
 
-    var thisComponent = this;
-
-    function setPropState(node, value) {
-      node[propName] = value;
-      var children = node.children;
-      if (children) {
-        node.children.forEach(function (childNode, ci) {
-          setPropState(childNode, value);
-        });
-      }
-    }
-
-    function getUpdatedTreeState(state) {
-      state = state || thisComponent.state.dynamicTreeData;
-      var id = lineage.shift();
-      state.forEach(function (node, i) {
-        if (i === id) {
-          if (!lineage.length) {
-            setPropState(state[i], !state[i][propName]);
-          } else {
-            state[i].children = getUpdatedTreeState(state[i].children);
-          }
-        }
-      });
-
-      return state;
-
-    }
-
-    this.setState(getUpdatedTreeState());
+    this.setState(TreeMenuUtils.getNewTreeState(lineage, this.state.dynamicTreeData, propName));
 
   },
 
