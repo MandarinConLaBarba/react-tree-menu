@@ -119,15 +119,15 @@ The CSS class to give the collapse icon component
 
 ### onTreeNodeClick
 
-Function handler for click events on <TreeNode /> components
+Function handler for click events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event
 
 ### onTreeNodeCollapseChange
 
-Function handler for collapse events on <TreeNode /> components
+Function handler for collapse events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event
 
 ### onTreeNodeCheckChange
 
-Function handler for checkbox change events on <TreeNode /> components
+Function handler for checkbox change events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event
 
 ### data
 

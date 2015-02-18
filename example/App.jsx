@@ -54,12 +54,12 @@ var App = React.createClass({
         <div className="col-lg-4">
           <div className="row">
             <div className="col-lg-12">
-              {this._getStaticTreeExample()}
+              {this._getDynamicTreeExample()}
             </div>
           </div>
           <div className="row">
             <div className="col-lg-12">
-              {this._getDynamicTreeExample()}
+              {this._getStaticTreeExample()}
             </div>
           </div>
         </div>
@@ -74,8 +74,6 @@ var App = React.createClass({
 
       </div>
 
-
-
     </div>;
 
   },
@@ -83,36 +81,59 @@ var App = React.createClass({
   _getStaticTreeExample: function () {
 
     return <div>
-      <h2>Tree Menu 1</h2>
-      <TreeMenu
-        identifier={"id"}
-        onTreeNodeClick={this._setLastActionState.bind(this, "clicked")}
-        onTreeNodeCheckChange={this._setLastActionState.bind(this, "checked")}
-        collapsible={false}
-        expandIconClass="fa fa-chevron-right"
-        collapseIconClass="fa fa-chevron-down">
-        <TreeNode label="Option 1" id="option_1"/>
-        <TreeNode label="Option 2" collapsible={false} id="option_2">
-          <TreeNode label="Option A" checkbox={true} id="option_2.a"/>
-          <TreeNode label="Option B" checkbox={true} id="option_2.b"/>
-        </TreeNode>
-        <TreeNode label="Option 3" id="option_3"/>
-        <TreeNode label="Option 4" id="option_4"/>
-      </TreeMenu>
+      <h2>Tree Menu (Declarative)</h2>
+      <ul>
+        <li>This menu is built w/ nested TreeNode components</li>
+        <li>It <u>is not</u> bound to state, so clicking on TreeNode components doesn't UI mutate state.</li>
+        <li>It has collapsible=false, so no expand/collapse icons show</li>
+        <li>It has identifier="id", so it uses the 'id' prop when emitting events</li>
+      </ul>
+      <div className="panel panel-default">
+        <div className="panel-heading">Declarative Menu</div>
+        <div className="panel-body">
+          <TreeMenu
+            identifier="id"
+            onTreeNodeClick={this._setLastActionState.bind(this, "clicked")}
+            onTreeNodeCheckChange={this._setLastActionState.bind(this, "checkChanged")}
+            collapsible={false}
+            expandIconClass="fa fa-chevron-right"
+            collapseIconClass="fa fa-chevron-down">
+            <TreeNode label="Option 1" id="option_1"/>
+            <TreeNode label="Option 2" collapsible={false} id="option_2">
+              <TreeNode label="Option A" checkbox={true} id="option_2.a"/>
+              <TreeNode label="Option B" checkbox={true} id="option_2.b"/>
+            </TreeNode>
+            <TreeNode label="Option 3" id="option_3"/>
+            <TreeNode label="Option 4" id="option_4"/>
+          </TreeMenu>
+        </div>
+      </div>
+
     </div>;
   },
 
   _getDynamicTreeExample: function () {
 
     return <div>
-      <h2>Tree Menu 2</h2>
-      <TreeMenu
-        expandIconClass="fa fa-chevron-right"
-        collapseIconClass="fa fa-chevron-down"
-        onTreeNodeClick={this._setLastActionState.bind(this, "clicked")}
-        onTreeNodeCollapseChange={this._handleDynamicTreeNodePropChange.bind(this, "collapsed")}
-        onTreeNodeCheckChange={this._handleDynamicTreeNodePropChange.bind(this, "checked")}
-        data={this.state.dynamicTreeData} />
+      <h2>Tree Menu (Dynamic)</h2>
+      <ul>
+        <li>This menu is built dynamically using the data prop</li>
+        <li>It <u>is</u> bound to state, so clicking on TreeNode components does UI mutate state.</li>
+        <li>It is collapsible (the default), so expand/collapse icons show</li>
+        <li>It has no identifier prop for the TreeMenu, so it uses the array index when emitting events</li>
+      </ul>
+      <div className="panel panel-default">
+        <div className="panel-heading">Dynamic Menu</div>
+        <div className="panel-body">
+          <TreeMenu
+            expandIconClass="fa fa-chevron-right"
+            collapseIconClass="fa fa-chevron-down"
+            onTreeNodeClick={this._setLastActionState.bind(this, "clicked")}
+            onTreeNodeCollapseChange={this._handleDynamicTreeNodePropChange.bind(this, "collapsed")}
+            onTreeNodeCheckChange={this._handleDynamicTreeNodePropChange.bind(this, "checked")}
+            data={this.state.dynamicTreeData} />
+        </div>
+      </div>
     </div>;
 
   },
@@ -157,7 +178,15 @@ var App = React.createClass({
   },
 
   _setLastActionState: function (action, node) {
+
+    var toggleEvents = ["collapse", "checked"];
+
+    if (toggleEvents.indexOf(action) >= 0) {
+      action += "Changed";
+    }
+
     console.log("Controller View received tree menu " + action + " action: " + node.join(" > "));
+
     this.setState({
       lastAction: {
         event: action,
