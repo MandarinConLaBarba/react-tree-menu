@@ -6,6 +6,7 @@ A stateless tree component with the following features:
 * Collapsible nodes
 * Dynamic tree generation
 * Declarative tree menus
+* Built with the Flux proposal in mind (i.e. trickle-down state)
 
 ## Please check out the demo.
 
