@@ -49,12 +49,3 @@
     top: 0;
     opacity: 1;
 }
-
-.last-action-leave {
-    opacity: 1;
-    transition: opacity .1s ease-in;
-}
-
-.last-action-leave.last-action-leave-active {
-    opacity: 0.01;
-}
