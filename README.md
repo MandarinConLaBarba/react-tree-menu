@@ -98,7 +98,7 @@ var data = [{
 
 ```
 
-## <TreeMenu/> Props
+## `<TreeMenu/>` Props
 
 ### identifier
 
@@ -132,7 +132,7 @@ Function handler for checkbox change events on <TreeNode /> components. Receives
 
 The data to use when building <TreeNode/> components dynamically
 
-## <TreeNode /> Props
+## `<TreeNode />` Props
 
 ### label
 
