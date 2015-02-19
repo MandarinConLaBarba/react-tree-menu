@@ -124,7 +124,7 @@ var App = React.createClass({
   _getUnboundTreeExample: function () {
 
     return <div>
-      <h2>Tree Menu (Unbound: Won't Update UI State)</h2>
+      <h2>{"Tree Menu (Unbound: Won't Update UI State)"}</h2>
       <ul>
         <li>This menu doesn't have any handlers applied that update UI state, so it's static.</li>
       </ul>
