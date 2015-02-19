@@ -24,3 +24,37 @@
     font-size: 22px;
 }
 
+.hero h1 {
+    font-size: 50px;
+}
+
+.hero code {
+    color: #3c763d;
+    background-color: #dff0d8;
+}
+
+.last-action {
+    position: relative;
+}
+
+.last-action-enter {
+    position: relative;
+    top: -30px;
+    opacity: 0.01;
+    transition: all .1s ease-in;
+}
+
+.last-action-enter.last-action-enter-active {
+    position: relative;
+    top: 0;
+    opacity: 1;
+}
+
+.last-action-leave {
+    opacity: 1;
+    transition: opacity .1s ease-in;
+}
+
+.last-action-leave.last-action-leave-active {
+    opacity: 0.01;
+}
