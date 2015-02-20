@@ -153,7 +153,7 @@ The data to use when building <TreeNode/> components dynamically
 
     var onClick = function(node) {
 
-        //node is in format: [<topLevelId>, <branchId>, <leafId>], where <leafId> is the <TreeNode/> that sourced the event
+        //node is in format: [<topLevelId>, [<nodeId>,] <nodeId>], where <nodeId> is the <TreeNode/> that sourced the event
         //...
     }
 
