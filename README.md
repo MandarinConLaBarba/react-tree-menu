@@ -113,6 +113,11 @@ var data = [{
 
 ## `<TreeMenu/>` Props
 
+### `stateful={<Boolean>}`
+
+If you need it, you can make `<TreeMenu/`> keep track of its own state. That being said, `react-tree-menu` was designed to
+fit inside Flux architecture, which encourages components to render based on props passed from the Controller-View. Defaults to false.
+
 ### `classNamePrefix={<String>}`
 
 The prefix to put in front of all the CSS classes for nested element (like the container for the menu, the checkbox, etc)

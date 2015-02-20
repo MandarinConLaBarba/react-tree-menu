@@ -14,6 +14,7 @@ var TreeNode = React.createClass({
 
   propTypes : {
 
+    stateful: React.PropTypes.bool,
     checkbox: React.PropTypes.bool,
     collapsible : React.PropTypes.bool,
     collapsed : React.PropTypes.bool,
@@ -28,8 +29,13 @@ var TreeNode = React.createClass({
 
   },
 
+  getInitialState: function () {
+    return {};
+  },
+
   getDefaultProps: function () {
     return {
+      stateful: false,
       collapsible: true,
       collapsed: false,
       checkbox : false,
@@ -61,7 +67,7 @@ var TreeNode = React.createClass({
         collapseToggleHandler = noop;
         collapseClassName += "collapse-spacer";
       } else {
-        collapseClassName += (props.collapsed ? props.expandIconClass : props.collapseIconClass);
+        collapseClassName += (this._isCollapsed() ? props.expandIconClass : props.collapseIconClass);
       }
       collapseNode = <span onClick={collapseToggleHandler} className={collapseClassName}></span>
     }
@@ -83,7 +89,7 @@ var TreeNode = React.createClass({
 
     var props = this.props;
 
-    if (props.collapsible && props.collapsed) return null;
+    if (this._isCollapsed()) return null;
 
     return (
       <div className={this._getRootCssClass() + "-children"}>
@@ -113,8 +119,29 @@ var TreeNode = React.createClass({
     return <input
       className={props.classNamePrefix + "-node-checkbox"}
       type="checkbox"
-      checked={props.checked}
+      checked={this._isChecked()}
       onChange={noop}/>;
+  },
+
+  _isStateful: function () {
+
+    return this.props.stateful ? true : false;
+
+  },
+
+  _isChecked: function () {
+
+    if (this._isStateful() && this.state.checked) return true;
+    return this.props.checked;
+
+  },
+
+  _isCollapsed: function () {
+
+    if (!this.props.collapsible) return false;
+    if (this._isStateful() && this.state.collapsed) return true;
+    return this.props.collapsed;
+
   },
 
   _handleClick: function () {
@@ -126,14 +153,33 @@ var TreeNode = React.createClass({
 
   },
 
+  _toggleNodeStateIfStateful: function (field) {
+    if (this._isStateful()) {
+      var newValue = !this.props[field];
+      if (typeof this.state[field] !== "undefined") {
+        newValue = !this.state[field];
+      }
+      var mutation = {};
+      mutation[field] = newValue;
+      this.setState(mutation);
+    }
+
+  },
+
   _handleCheckChange: function () {
+
+    this._toggleNodeStateIfStateful("checked");
 
     this.props.onCheckChange(this._getLineage());
 
   },
 
   _handleCollapseChange: function () {
+
+    this._toggleNodeStateIfStateful("collapsed");
+
     this.props.onCollapseChange(this._getLineage());
+
   },
 
   _getLineage: function () {

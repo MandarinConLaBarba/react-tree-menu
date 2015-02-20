@@ -18,6 +18,7 @@ var TreeMenu = React.createClass({
 
   propTypes : {
 
+    stateful: React.PropTypes.bool,
     classNamePrefix: React.PropTypes.string,
     identifier: React.PropTypes.string,
     onTreeNodeClick: React.PropTypes.func,
@@ -32,7 +33,8 @@ var TreeMenu = React.createClass({
 
   getDefaultProps: function () {
     return {
-      classNamePrefix: "tree-view"
+      classNamePrefix: "tree-view",
+      stateful: false
     }
   },
 

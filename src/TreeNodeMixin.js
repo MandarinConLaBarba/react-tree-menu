@@ -21,6 +21,7 @@ var TreeNodeMixin = {
       expandIconClass: rootProps.expandIconClass,
       collapsible: rootProps.collapsible,
       ancestor: ancestor,
+      stateful: rootProps.stateful,
       onClick: rootProps.onTreeNodeClick,
       onCheckChange: rootProps.onTreeNodeCheckChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
