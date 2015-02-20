@@ -33,11 +33,11 @@ var App = React.createClass({displayName: "App",
               label: "Sub Option A",
               children: [
                 {
-                  label: "Third Level Option 1",
+                  label: "Third Level Nest Option 1",
                   checkbox : true
                 },
                 {
-                  label: "Third Level Option 2",
+                  label: "Third Level Nest Option 2",
                   checkbox : true
                 }
               ]
@@ -63,88 +63,36 @@ var App = React.createClass({displayName: "App",
       ), 
 
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "col-lg-12 hero"}, 
-          React.createElement("h3", null, "Check out the code for this demo ", React.createElement("a", {href: "https://github.com/MandarinConLaBarba/react-tree-menu/blob/master/example/App.jsx"}, "here"), ".")
-        )
-      ), 
-
-
-
-      React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "col-lg-3"}, 
-          React.createElement("h2", null, "Dynamic"), 
-          React.createElement("ul", null, 
-            React.createElement("li", null, "This menu is built dynamically using the data prop"), 
-            React.createElement("li", null, "It is collapsible (the default), so expand/collapse icons show"), 
-            React.createElement("li", null, "It has no identifier prop for the TreeMenu, so it uses the array index when emitting events")
-          )
+        React.createElement("div", {className: "col-lg-4"}, 
+          this._getDynamicTreeExample()
         ), 
 
-        React.createElement("div", {className: "col-lg-3"}, 
-          React.createElement("h2", null, "Declarative"), 
-          React.createElement("ul", null, 
-            React.createElement("li", null, "This menu is built w/ nested TreeNode components"), 
-            React.createElement("li", null, "It has collapsible=false, so no expand/collapse icons show"), 
-            React.createElement("li", null, "It has identifier=\"id\", so it uses the 'id' prop when emitting events")
-          )
+        React.createElement("div", {className: "col-lg-4"}, 
+          this._getDeclarativeTreeExample()
         ), 
 
-        React.createElement("div", {className: "col-lg-3"}, 
-          React.createElement("h2", null, "Unbound: Won't Update UI State"), 
-          React.createElement("ul", null, 
-            React.createElement("li", null, "This menu doesn't have any handlers applied that update UI state, so it's static.")
-          )
-        ), 
-
-        React.createElement("div", {className: "col-lg-3"}, 
-          React.createElement("h2", null, "Stateful, manages its own UI state"), 
-          React.createElement("ul", null, 
-            React.createElement("li", null, "This menu has stateful=true, so it manages its own state w/o help from the Controller-View.")
-          )
+        React.createElement("div", {className: "col-lg-4"}, 
+          this._getUnboundTreeExample()
         )
       ), 
 
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "col-lg-3"}, 
-          this._getExamplePanel("Dynamic", this._getDynamicTreeExample())
-        ), 
-
-        React.createElement("div", {className: "col-lg-3"}, 
-          this._getExamplePanel("Declarative", this._getDeclarativeTreeExample())
-        ), 
-
-        React.createElement("div", {className: "col-lg-3"}, 
-          this._getExamplePanel("Unbound", this._getUnboundTreeExample())
-        ), 
-
-        React.createElement("div", {className: "col-lg-3"}, 
-          this._getExamplePanel("Stateful", this._getStatefulTreeExample())
-        )
-      ), 
-
-      React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "col-lg-3"}, 
+        React.createElement("div", {className: "col-lg-4"}, 
           React.createElement(CSSTransitionGroup, {transitionName: "last-action", transitionLeave: false}, 
             this._getLastActionNode("1")
           )
         ), 
 
-        React.createElement("div", {className: "col-lg-3"}, 
+        React.createElement("div", {className: "col-lg-4"}, 
           React.createElement(CSSTransitionGroup, {transitionName: "last-action", transitionLeave: false}, 
             this._getLastActionNode("2")
           )
 
         ), 
 
-        React.createElement("div", {className: "col-lg-3"}, 
+        React.createElement("div", {className: "col-lg-4"}, 
           React.createElement(CSSTransitionGroup, {transitionName: "last-action", transitionLeave: false}, 
             this._getLastActionNode("3")
-          )
-        ), 
-
-        React.createElement("div", {className: "col-lg-3"}, 
-          React.createElement(CSSTransitionGroup, {transitionName: "last-action", transitionLeave: false}, 
-            this._getLastActionNode("4")
           )
         )
       )
@@ -165,7 +113,7 @@ var App = React.createClass({displayName: "App",
         React.createElement("div", {className: "text-center alert alert-success tree-event-alert", key: "lastAction_" + col + "_" + action.time}, 
           React.createElement("h3", null, "Event Received:"), 
           React.createElement("div", null, React.createElement("strong", null, action.event)), 
-          React.createElement("h3", null, React.createElement("code", null, "<TreeNode/>"), " Affected: "), 
+          React.createElement("h3", null, React.createElement("code", null, "<TreeMenu/>"), " Affected: "), 
           React.createElement("div", null, React.createElement("strong", null, action.node))
         ));
     }
@@ -174,95 +122,94 @@ var App = React.createClass({displayName: "App",
 
   },
 
-
-  _getStatefulTreeExample: function () {
-
-    return (
-      React.createElement(TreeMenu, {
-        identifier: "id", 
-        stateful: true, 
-        onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "4"), 
-        onTreeNodeCollapseChange: this._setLastActionState.bind(this, "collapsed", "4"), 
-        onTreeNodeCheckChange: this._setLastActionState.bind(this, "checked", "4"), 
-        expandIconClass: "fa fa-chevron-right", 
-        collapseIconClass: "fa fa-chevron-down"}, 
-        React.createElement(TreeNode, {label: "Option 1", checkbox: true, id: "option_1"}), 
-        React.createElement(TreeNode, {label: "Option 2", checkbox: true, id: "option_2"}, 
-          React.createElement(TreeNode, {label: "Option A", checkbox: true, id: "option_2.a"}), 
-          React.createElement(TreeNode, {label: "Option B", checkbox: true, id: "option_2.b"})
-        ), 
-        React.createElement(TreeNode, {label: "Option 3", checkbox: true, id: "option_3"}), 
-        React.createElement(TreeNode, {label: "Option 4", checkbox: true, id: "option_3"})
-      )
-    );
-  },
-
   _getUnboundTreeExample: function () {
 
-    return (
-      React.createElement(TreeMenu, {
-        identifier: "id", 
-        onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "3"), 
-        onTreeNodeCollapseChange: this._setLastActionState.bind(this, "collapsed", "3"), 
-        onTreeNodeCheckChange: this._setLastActionState.bind(this, "checked", "3"), 
-        expandIconClass: "fa fa-chevron-right", 
-        collapseIconClass: "fa fa-chevron-down"}, 
-        React.createElement(TreeNode, {label: "Option 1", checkbox: true, id: "option_1"}), 
-        React.createElement(TreeNode, {label: "Option 2", checkbox: true, id: "option_2"}, 
-          React.createElement(TreeNode, {label: "Option A", checkbox: true, checked: true, id: "option_2.a"}), 
-          React.createElement(TreeNode, {label: "Option B", checkbox: true, id: "option_2.b"})
-        ), 
-        React.createElement(TreeNode, {label: "Option 3", checkbox: true, id: "option_3"}), 
-        React.createElement(TreeNode, {label: "Option 3", checkbox: true, id: "option_3"})
+    return React.createElement("div", null, 
+      React.createElement("h2", null, "Tree Menu (Unbound: Won't Update UI State)"), 
+      React.createElement("ul", null, 
+        React.createElement("li", null, "This menu doesn't have any handlers applied that update UI state, so it's static.")
+      ), 
+
+      React.createElement("div", {className: "panel panel-default"}, 
+        React.createElement("div", {className: "panel-heading"}, "Unbound Menu"), 
+        React.createElement("div", {className: "panel-body"}, 
+          React.createElement(TreeMenu, {
+            identifier: "id", 
+            onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "3"), 
+            onTreeNodeCollapseChange: this._setLastActionState.bind(this, "collapsed", "3"), 
+            onTreeNodeCheckChange: this._setLastActionState.bind(this, "checked", "3"), 
+            expandIconClass: "fa fa-chevron-right", 
+            collapseIconClass: "fa fa-chevron-down"}, 
+            React.createElement(TreeNode, {label: "Option 1", checkbox: true, id: "option_1"}), 
+            React.createElement(TreeNode, {label: "Option 2", checkbox: true, id: "option_2"}, 
+              React.createElement(TreeNode, {label: "Option A", checkbox: true, checked: true, id: "option_2.a"}), 
+              React.createElement(TreeNode, {label: "Option B", checkbox: true, id: "option_2.b"})
+            ), 
+            React.createElement(TreeNode, {label: "Option 3", checkbox: true, id: "option_3"})
+          )
+        )
       )
+
     );
   },
 
   _getDeclarativeTreeExample: function () {
 
-    return (
-      React.createElement(TreeMenu, {
-        identifier: "id", 
-        onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "2"), 
-        onTreeNodeCollapseChange: this._handleDeclarativeTreeNodePropChange.bind(this, "collapsed"), 
-        onTreeNodeCheckChange: this._handleDeclarativeTreeNodePropChange.bind(this, "checked"), 
-        collapsible: false, 
-        expandIconClass: "fa fa-chevron-right", 
-        collapseIconClass: "fa fa-chevron-down"}, 
-        React.createElement(TreeNode, {label: "Option 1", id: "option_1"}), 
-        React.createElement(TreeNode, {label: "Option 2", id: "option_2"}, 
-          React.createElement(TreeNode, {label: "Option A", checkbox: true, checked: this.state.staticTreeData["option_2.a"].checked, id: "option_2.a"}), 
-          React.createElement(TreeNode, {label: "Option B", checkbox: true, checked: this.state.staticTreeData["option_2.b"].checked, id: "option_2.b"})
-        ), 
-        React.createElement(TreeNode, {label: "Option 3", id: "option_3"}), 
-        React.createElement(TreeNode, {label: "Option 4", id: "option_4"})
+    return React.createElement("div", null, 
+      React.createElement("h2", null, "Tree Menu (Declarative)"), 
+      React.createElement("ul", null, 
+        React.createElement("li", null, "This menu is built w/ nested TreeNode components"), 
+        React.createElement("li", null, "It has collapsible=false, so no expand/collapse icons show"), 
+        React.createElement("li", null, "It has identifier=\"id\", so it uses the 'id' prop when emitting events")
+      ), 
+      React.createElement("div", {className: "panel panel-default"}, 
+        React.createElement("div", {className: "panel-heading"}, "Declarative Menu"), 
+        React.createElement("div", {className: "panel-body"}, 
+          React.createElement(TreeMenu, {
+            identifier: "id", 
+            onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "2"), 
+            onTreeNodeCollapseChange: this._handleDeclarativeTreeNodePropChange.bind(this, "collapsed"), 
+            onTreeNodeCheckChange: this._handleDeclarativeTreeNodePropChange.bind(this, "checked"), 
+            collapsible: false, 
+            expandIconClass: "fa fa-chevron-right", 
+            collapseIconClass: "fa fa-chevron-down"}, 
+            React.createElement(TreeNode, {label: "Option 1", id: "option_1"}), 
+            React.createElement(TreeNode, {label: "Option 2", id: "option_2"}, 
+              React.createElement(TreeNode, {label: "Option A", checkbox: true, checked: this.state.staticTreeData["option_2.a"].checked, id: "option_2.a"}), 
+              React.createElement(TreeNode, {label: "Option B", checkbox: true, checked: this.state.staticTreeData["option_2.b"].checked, id: "option_2.b"})
+            ), 
+            React.createElement(TreeNode, {label: "Option 3", id: "option_3"}), 
+            React.createElement(TreeNode, {label: "Option 4", id: "option_4"})
+          )
+        )
       )
+
     );
   },
 
   _getDynamicTreeExample: function () {
 
-    return  (
-      React.createElement(TreeMenu, {
-        expandIconClass: "fa fa-chevron-right", 
-        collapseIconClass: "fa fa-chevron-down", 
-        onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "1"), 
-        onTreeNodeCollapseChange: this._handleDynamicTreeNodePropChange.bind(this, "collapsed"), 
-        onTreeNodeCheckChange: this._handleDynamicTreeNodePropChange.bind(this, "checked"), 
-        data: this.state.dynamicTreeData})
-    );
-
-  },
-
-  _getExamplePanel: function (title, treeMenuNode) {
     return React.createElement("div", null, 
+      React.createElement("h2", null, "Tree Menu (Dynamic)"), 
+      React.createElement("ul", null, 
+        React.createElement("li", null, "This menu is built dynamically using the data prop"), 
+        React.createElement("li", null, "It is collapsible (the default), so expand/collapse icons show"), 
+        React.createElement("li", null, "It has no identifier prop for the TreeMenu, so it uses the array index when emitting events")
+      ), 
       React.createElement("div", {className: "panel panel-default"}, 
-        React.createElement("div", {className: "panel-heading"}, title + " Menu"), 
+        React.createElement("div", {className: "panel-heading"}, "Dynamic Menu"), 
         React.createElement("div", {className: "panel-body"}, 
-          treeMenuNode
+          React.createElement(TreeMenu, {
+            expandIconClass: "fa fa-chevron-right", 
+            collapseIconClass: "fa fa-chevron-down", 
+            onTreeNodeClick: this._setLastActionState.bind(this, "clicked", "1"), 
+            onTreeNodeCollapseChange: this._handleDynamicTreeNodePropChange.bind(this, "collapsed"), 
+            onTreeNodeCheckChange: this._handleDynamicTreeNodePropChange.bind(this, "checked"), 
+            data: this.state.dynamicTreeData})
         )
       )
     );
+
   },
 
   _handleDeclarativeTreeNodePropChange: function (propName, lineage) {
@@ -21943,27 +21890,21 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":79}],211:[function(require,module,exports){
-var React = require('react'),
+var React = require('react/addons'),
   TreeNode = require('./TreeNode.jsx'),
   TreeNodeFactory = React.createFactory(TreeNode),
   TreeNodeMixin = require('./TreeNodeMixin'),
-  clone = require('lodash/lang/clone'),
   omit = require('lodash/object/omit'),
   invariant = require('react/lib/invariant'),
-  assign = require('object-assign');
+  assign = require('object-assign'),
+  clone = require('lodash/lang/clone');
 
-/**
- * The root component for a tree view. Can have one or many <TreeNode/> children
- *
- * @type {TreeMenu}
- */
 var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   mixins : [TreeNodeMixin],
 
   propTypes : {
 
-    stateful: React.PropTypes.bool,
     classNamePrefix: React.PropTypes.string,
     identifier: React.PropTypes.string,
     onTreeNodeClick: React.PropTypes.func,
@@ -21978,8 +21919,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   getDefaultProps: function () {
     return {
-      classNamePrefix: "tree-view",
-      stateful: false
+      classNamePrefix: "tree-view"
     }
   },
 
@@ -22048,7 +21988,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
       return data.map(function(dataForNode, i) {
 
-        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange"]),
+        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange", ""]),
           children = [];
 
         if (dataForNode.children) {
@@ -22074,7 +22014,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
 module.exports = TreeMenu;
 
-},{"./TreeNode.jsx":213,"./TreeNodeMixin":214,"lodash/lang/clone":35,"lodash/object/omit":42,"object-assign":48,"react":210,"react/lib/invariant":189}],212:[function(require,module,exports){
+},{"./TreeNode.jsx":213,"./TreeNodeMixin":214,"lodash/lang/clone":35,"lodash/object/omit":42,"object-assign":48,"react/addons":49,"react/lib/invariant":189}],212:[function(require,module,exports){
 
 var TreeMenuUtils = {
 
@@ -22130,19 +22070,12 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
-/**
- * Individual nodes in tree hierarchy, nested under a single <TreeMenu/> node
- *
- *
- * @type {TreeNode}
- */
 var TreeNode = React.createClass({displayName: "TreeNode",
 
   mixins : [TreeNodeMixin],
 
   propTypes : {
 
-    stateful: React.PropTypes.bool,
     checkbox: React.PropTypes.bool,
     collapsible : React.PropTypes.bool,
     collapsed : React.PropTypes.bool,
@@ -22157,13 +22090,8 @@ var TreeNode = React.createClass({displayName: "TreeNode",
 
   },
 
-  getInitialState: function () {
-    return {};
-  },
-
   getDefaultProps: function () {
     return {
-      stateful: false,
       collapsible: true,
       collapsed: false,
       checkbox : false,
@@ -22176,9 +22104,7 @@ var TreeNode = React.createClass({displayName: "TreeNode",
       onCollapseChange: function (lineage) {
         console.log("Tree Node indicating collapse state should change: " + lineage.join(" > "));
       },
-      checked : false,
-      expandIconClass: "",
-      collapseIconClass: ""
+      checked : false
     }
   },
 
@@ -22195,7 +22121,7 @@ var TreeNode = React.createClass({displayName: "TreeNode",
         collapseToggleHandler = noop;
         collapseClassName += "collapse-spacer";
       } else {
-        collapseClassName += (this._isCollapsed() ? props.expandIconClass : props.collapseIconClass);
+        collapseClassName += (props.collapsed ? props.expandIconClass : props.collapseIconClass);
       }
       collapseNode = React.createElement("span", {onClick: collapseToggleHandler, className: collapseClassName})
     }
@@ -22217,7 +22143,7 @@ var TreeNode = React.createClass({displayName: "TreeNode",
 
     var props = this.props;
 
-    if (this._isCollapsed()) return null;
+    if (props.collapsible && props.collapsed) return null;
 
     return (
       React.createElement("div", {className: this._getRootCssClass() + "-children"}, 
@@ -22247,29 +22173,8 @@ var TreeNode = React.createClass({displayName: "TreeNode",
     return React.createElement("input", {
       className: props.classNamePrefix + "-node-checkbox", 
       type: "checkbox", 
-      checked: this._isChecked(), 
+      checked: props.checked, 
       onChange: noop});
-  },
-
-  _isStateful: function () {
-
-    return this.props.stateful ? true : false;
-
-  },
-
-  _isChecked: function () {
-
-    if (this._isStateful() && this.state.checked) return true;
-    return this.props.checked;
-
-  },
-
-  _isCollapsed: function () {
-
-    if (!this.props.collapsible) return false;
-    if (this._isStateful() && this.state.collapsed) return true;
-    return this.props.collapsed;
-
   },
 
   _handleClick: function () {
@@ -22281,33 +22186,14 @@ var TreeNode = React.createClass({displayName: "TreeNode",
 
   },
 
-  _toggleNodeStateIfStateful: function (field) {
-    if (this._isStateful()) {
-      var newValue = !this.props[field];
-      if (typeof this.state[field] !== "undefined") {
-        newValue = !this.state[field];
-      }
-      var mutation = {};
-      mutation[field] = newValue;
-      this.setState(mutation);
-    }
-
-  },
-
   _handleCheckChange: function () {
-
-    this._toggleNodeStateIfStateful("checked");
 
     this.props.onCheckChange(this._getLineage());
 
   },
 
   _handleCollapseChange: function () {
-
-    this._toggleNodeStateIfStateful("collapsed");
-
     this.props.onCollapseChange(this._getLineage());
-
   },
 
   _getLineage: function () {
@@ -22322,6 +22208,8 @@ var TreeNode = React.createClass({displayName: "TreeNode",
 module.exports = TreeNode;
 
 },{"./TreeNodeMixin":214,"lodash/utility/noop":47,"react":210}],214:[function(require,module,exports){
+var React = require('react/addons');
+
 var TreeNodeMixin = {
 
   /**
@@ -22345,7 +22233,6 @@ var TreeNodeMixin = {
       expandIconClass: rootProps.expandIconClass,
       collapsible: rootProps.collapsible,
       ancestor: ancestor,
-      stateful: rootProps.stateful,
       onClick: rootProps.onTreeNodeClick,
       onCheckChange: rootProps.onTreeNodeCheckChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
@@ -22363,4 +22250,4 @@ var TreeNodeMixin = {
 
 module.exports = TreeNodeMixin;
 
-},{}]},{},[2]);
+},{"react/addons":49}]},{},[2]);
