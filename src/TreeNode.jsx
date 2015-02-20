@@ -42,7 +42,9 @@ var TreeNode = React.createClass({
       onCollapseChange: function (lineage) {
         console.log("Tree Node indicating collapse state should change: " + lineage.join(" > "));
       },
-      checked : false
+      checked : false,
+      expandIconClass: "",
+      collapseIconClass: ""
     }
   },
 

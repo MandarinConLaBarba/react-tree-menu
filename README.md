@@ -113,41 +113,65 @@ var data = [{
 
 ## `<TreeMenu/>` Props
 
-### classNamePrefix
+### `classNamePrefix={<String>}`
 
 The prefix to put in front of all the CSS classes for nested element (like the container for the menu, the checkbox, etc)
 
-### identifier
+### `identifier={<String>}`
 
-The prop/field to use for the node identifier. Defaults to Array index
+Optional prop/field to use for the node identifier. Defaults to Array index
 
-### collapsible
+### `collapsible={<Boolean>}`
 
-Whether or not nested <TreeNode/> components are collapsible
+Whether or not nested <TreeNode/> components are collapsible. Defaults to true.
 
-### expandIconClass
+### `expandIconClass={<String>}`
 
-The CSS class to give the expand icon component
+The CSS class to give the expand icon component. Empty by default.
 
-### collapseIconClass
+### `collapseIconClass={<String>}`
 
-The CSS class to give the collapse icon component
+The CSS class to give the collapse icon component. Empty by default
 
-### onTreeNodeClick
+### `onTreeNodeClick={<Function>}`
 
-Function handler for click event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props).
+Function handler for click event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
 
-### onTreeNodeCollapseChange
+### `onTreeNodeCollapseChange={<Function>}`
 
-Function handler for collapse change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props).
+Function handler for collapse change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
 
-### onTreeNodeCheckChange
+### `onTreeNodeCheckChange={<Function>}`
 
-Function handler for checkbox change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props).
+Function handler for checkbox change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
 
-### data
+### `data={<Array>}`
 
-The data to use when building <TreeNode/> components dynamically
+The data to use when building <TreeNode/> components dynamically. Required if there aren't any nested `<TreeNode/>` elements declared.
+
+Sample format:
+
+```
+
+    [{label : "Option 1"},
+     {
+      label : "Option 2",
+      children : [
+        {
+         checkbox: true,
+         label: "Sub Option A",
+         children: [{
+                     label: "Third Level Nest Option 1",
+                     checkbox : true,
+                     children : {...},
+                   }]
+               },
+        {
+         checkbox: true,
+         label: "Sub Option B"
+        }]}]
+
+```
 
 ## Callback API for `<TreeMenu/>` event handler props
 
@@ -168,13 +192,27 @@ The data to use when building <TreeNode/> components dynamically
 
 ## `<TreeNode />` Props
 
-### label
+### `label={<String>}`
 
-The node label
+The node label. Required.
 
-### checkbox
+### `checkbox={<Boolean>}`
 
-Whether or not the node has a checkbox. If the node checkbox={true}, clicking on the label also fires the `onTreeNodeCheckChange` function
+Whether or not the node has a checkbox. Defaults to false. If the node checkbox={true}, clicking on the label also fires the `onTreeNodeCheckChange` function
+
+### `checked={<Boolean>}`
+
+If the node has a checkbox, whether or not the node is checked. If the node checkbox={true}, clicking on the label also fires the `onTreeNodeCheckChange`
+function instead od the `onTreeNodeClick` function
+
+### `collapsible={<Boolean>}`
+
+Whether or not the node is collapsible. If the node has no children, this value has no effect. Defaults to true.
+This value is overridden by the `collapsible` prop value set on the root `<TreeMenu/>`
+
+### `collapsed={<Boolean>}`
+
+If the node is collapsible, whether or not the node is collapsed. Defaults to false.
 
 
 
