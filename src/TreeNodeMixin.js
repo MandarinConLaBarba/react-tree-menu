@@ -1,5 +1,3 @@
-var React = require('react/addons');
-
 var TreeNodeMixin = {
 
   /**

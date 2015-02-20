@@ -21890,15 +21890,20 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":79}],211:[function(require,module,exports){
-var React = require('react/addons'),
+var React = require('react'),
   TreeNode = require('./TreeNode.jsx'),
   TreeNodeFactory = React.createFactory(TreeNode),
   TreeNodeMixin = require('./TreeNodeMixin'),
+  clone = require('lodash/lang/clone'),
   omit = require('lodash/object/omit'),
   invariant = require('react/lib/invariant'),
-  assign = require('object-assign'),
-  clone = require('lodash/lang/clone');
+  assign = require('object-assign');
 
+/**
+ * The root component for a tree view. Can have one or many <TreeNode/> children
+ *
+ * @type {TreeMenu}
+ */
 var TreeMenu = React.createClass({displayName: "TreeMenu",
 
   mixins : [TreeNodeMixin],
@@ -21988,7 +21993,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
       return data.map(function(dataForNode, i) {
 
-        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange", ""]),
+        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange"]),
           children = [];
 
         if (dataForNode.children) {
@@ -22014,7 +22019,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
 module.exports = TreeMenu;
 
-},{"./TreeNode.jsx":213,"./TreeNodeMixin":214,"lodash/lang/clone":35,"lodash/object/omit":42,"object-assign":48,"react/addons":49,"react/lib/invariant":189}],212:[function(require,module,exports){
+},{"./TreeNode.jsx":213,"./TreeNodeMixin":214,"lodash/lang/clone":35,"lodash/object/omit":42,"object-assign":48,"react":210,"react/lib/invariant":189}],212:[function(require,module,exports){
 
 var TreeMenuUtils = {
 
@@ -22070,6 +22075,12 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
+/**
+ * Individual nodes in tree hierarchy, nested under a single <TreeMenu/> node
+ *
+ *
+ * @type {TreeNode}
+ */
 var TreeNode = React.createClass({displayName: "TreeNode",
 
   mixins : [TreeNodeMixin],
@@ -22208,8 +22219,6 @@ var TreeNode = React.createClass({displayName: "TreeNode",
 module.exports = TreeNode;
 
 },{"./TreeNodeMixin":214,"lodash/utility/noop":47,"react":210}],214:[function(require,module,exports){
-var React = require('react/addons');
-
 var TreeNodeMixin = {
 
   /**
@@ -22250,4 +22259,4 @@ var TreeNodeMixin = {
 
 module.exports = TreeNodeMixin;
 
-},{"react/addons":49}]},{},[2]);
+},{}]},{},[2]);

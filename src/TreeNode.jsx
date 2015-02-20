@@ -2,6 +2,12 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
+/**
+ * Individual nodes in tree hierarchy, nested under a single <TreeMenu/> node
+ *
+ *
+ * @type {TreeNode}
+ */
 var TreeNode = React.createClass({
 
   mixins : [TreeNodeMixin],

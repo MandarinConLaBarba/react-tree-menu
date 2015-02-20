@@ -1,12 +1,17 @@
-var React = require('react/addons'),
+var React = require('react'),
   TreeNode = require('./TreeNode.jsx'),
   TreeNodeFactory = React.createFactory(TreeNode),
   TreeNodeMixin = require('./TreeNodeMixin'),
+  clone = require('lodash/lang/clone'),
   omit = require('lodash/object/omit'),
   invariant = require('react/lib/invariant'),
-  assign = require('object-assign'),
-  clone = require('lodash/lang/clone');
+  assign = require('object-assign');
 
+/**
+ * The root component for a tree view. Can have one or many <TreeNode/> children
+ *
+ * @type {TreeMenu}
+ */
 var TreeMenu = React.createClass({
 
   mixins : [TreeNodeMixin],
@@ -96,7 +101,7 @@ var TreeMenu = React.createClass({
 
       return data.map(function(dataForNode, i) {
 
-        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange", ""]),
+        var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange"]),
           children = [];
 
         if (dataForNode.children) {

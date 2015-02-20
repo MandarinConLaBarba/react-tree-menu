@@ -21,7 +21,7 @@ npm install --save react-tree-menu
 ```
 
 var TreeMenu = require('react-tree-menu').TreeMenu,
-    TreeNode = require('react-tree-menu').TreeNode;;
+    TreeNode = require('react-tree-menu').TreeNode;
 
     ...
 
@@ -29,6 +29,19 @@ var TreeMenu = require('react-tree-menu').TreeMenu,
     <TreeMenu>
         <TreeNode/>
     </TreeMenu>
+
+```
+
+## Exports
+
+This package exports the following:
+
+```
+module.exports = {
+  TreeMenu: require('./src/TreeMenu.jsx'),
+  TreeNode: require('./src/TreeNode.jsx'),
+  Utils: require('./src/TreeMenuUtils')
+};
 
 ```
 
@@ -118,19 +131,38 @@ The CSS class to give the collapse icon component
 
 ### onTreeNodeClick
 
-Function handler for click events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event
+Function handler for click events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event.
+
+Function will be passed an array representation of the node. e.g. `[<topLevelId>, <branchId>, <leafId>]` where <leafId> is the <TreeNode/> that sourced the event.
 
 ### onTreeNodeCollapseChange
 
-Function handler for collapse events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event
+Function handler for collapse events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event.
 
 ### onTreeNodeCheckChange
 
-Function handler for checkbox change events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event
+Function handler for checkbox change events on <TreeNode /> components.
 
 ### data
 
 The data to use when building <TreeNode/> components dynamically
+
+## Callback API for `<TreeMenu/>` event handler props
+
+`<TreeMenu/>` callbacks will receive an array representation of the node. Example:
+
+```
+
+    var onClick = function(node) {
+
+        //node is in format: [<topLevelId>, <branchId>, <leafId>]
+        //...
+    }
+
+    return <TreeMenu onTreeNodeClick={onClick} />;
+
+```
+
 
 ## `<TreeNode />` Props
 
