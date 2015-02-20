@@ -113,6 +113,10 @@ var data = [{
 
 ## `<TreeMenu/>` Props
 
+### classNamePrefix
+
+The prefix to put in front of all the CSS classes for nested element (like the container for the menu, the checkbox, etc)
+
 ### identifier
 
 The prop/field to use for the node identifier. Defaults to Array index
