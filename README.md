@@ -131,17 +131,15 @@ The CSS class to give the collapse icon component
 
 ### onTreeNodeClick
 
-Function handler for click events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event.
-
-Function will be passed an array representation of the node. e.g. `[<topLevelId>, <branchId>, <leafId>]` where <leafId> is the <TreeNode/> that sourced the event.
+Function handler for click event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props).
 
 ### onTreeNodeCollapseChange
 
-Function handler for collapse events on <TreeNode /> components. Receives an array containing the node hierarchy that was the source of the event.
+Function handler for collapse change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props).
 
 ### onTreeNodeCheckChange
 
-Function handler for checkbox change events on <TreeNode /> components.
+Function handler for checkbox change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props).
 
 ### data
 
@@ -155,7 +153,7 @@ The data to use when building <TreeNode/> components dynamically
 
     var onClick = function(node) {
 
-        //node is in format: [<topLevelId>, <branchId>, <leafId>]
+        //node is in format: [<topLevelId>, <branchId>, <leafId>], where <leafId> is the <TreeNode/> that sourced the event
         //...
     }
 
