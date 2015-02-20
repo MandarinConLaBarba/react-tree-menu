@@ -1,4 +1,4 @@
-var React = require('react'),
+var React = require('react/addons'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
@@ -81,6 +81,20 @@ var TreeNode = React.createClass({
 
   },
 
+  componentWillReceiveProps: function (nextProps) {
+
+    if (!this._isStateful()) return;
+
+    var mutations = {};
+
+    if (this.props.checked !== nextProps.checked) {
+      mutations.checked = nextProps.checked;
+    }
+
+    this.setState(mutations);
+
+  },
+
   _getRootCssClass: function () {
     return this.props.classNamePrefix + "-node";
   },
@@ -91,9 +105,22 @@ var TreeNode = React.createClass({
 
     if (this._isCollapsed()) return null;
 
+    var children = props.children;
+
+    if (this._isStateful()) {
+      var state = this.state;
+      children = React.Children.map(props.children, function (child) {
+        return React.addons.cloneWithProps(child, {
+          key: child.key,
+          ref: child.ref,
+          checked : state.checked
+        })
+      });
+    }
+
     return (
       <div className={this._getRootCssClass() + "-children"}>
-          {props.children}
+          {children}
       </div>
     );
 
@@ -131,7 +158,7 @@ var TreeNode = React.createClass({
 
   _isChecked: function () {
 
-    if (this._isStateful() && this.state.checked) return true;
+    if (this._isStateful() && typeof this.state.checked !== "undefined") return this.state.checked;
     return this.props.checked;
 
   },
@@ -161,6 +188,7 @@ var TreeNode = React.createClass({
       }
       var mutation = {};
       mutation[field] = newValue;
+      console.log(mutation);
       this.setState(mutation);
     }
 

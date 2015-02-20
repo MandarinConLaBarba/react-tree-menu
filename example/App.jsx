@@ -188,7 +188,10 @@ var App = React.createClass({
         <TreeNode label="Option 1" checkbox={true} id="option_1"/>
         <TreeNode label="Option 2" checkbox={true} id="option_2">
           <TreeNode label="Option A" checkbox={true} id="option_2.a"/>
-          <TreeNode label="Option B" checkbox={true} id="option_2.b"/>
+          <TreeNode label="Option B" checkbox={true} id="option_2.b">
+            <TreeNode label="Option B.x" checkbox={true} id="option_2.b.x"/>
+            <TreeNode label="Option B.y" checkbox={true} id="option_2.b.y"/>
+          </TreeNode>
         </TreeNode>
         <TreeNode label="Option 3" checkbox={true} id="option_3"/>
         <TreeNode label="Option 4" checkbox={true} id="option_3"/>
