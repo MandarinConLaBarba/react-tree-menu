@@ -181,7 +181,8 @@ Sample format:
 
     var onClick = function(node) {
 
-        //node is in format: [<topLevelId>, [<nodeId>,] <nodeId>], where <nodeId> is the <TreeNode/> that sourced the event
+        //node is in format: [<topLevelId>, [...<nodeId>,] <nodeId>]
+        //where <nodeId> is the <TreeNode/> that sourced the event
         //...
     }
 
