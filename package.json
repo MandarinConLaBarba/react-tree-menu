@@ -1,6 +1,6 @@
 {
   "name": "react-tree-menu",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A tree menu component for React",
   "main": "index.js",
   "keywords": [
@@ -34,6 +34,11 @@
   },
   "scripts": {
     "test": "jest"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
   },
   "author": "Mandarin Drummond",
   "license": "MIT"

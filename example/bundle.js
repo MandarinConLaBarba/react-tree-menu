@@ -68,8 +68,6 @@ var App = React.createClass({displayName: "App",
         )
       ), 
 
-
-
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-lg-3"}, 
           React.createElement("h2", null, "Dynamic"), 

@@ -67,8 +67,6 @@ var App = React.createClass({
         </div>
       </div>
 
-
-
       <div className="row">
         <div className="col-lg-3">
           <h2>Dynamic</h2>
