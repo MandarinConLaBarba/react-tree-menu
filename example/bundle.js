@@ -191,9 +191,7 @@ var App = React.createClass({displayName: "App",
             React.createElement(TreeNode, {label: "Option B.x", checkbox: true, id: "option_2.b.x"}), 
             React.createElement(TreeNode, {label: "Option B.y", checkbox: true, id: "option_2.b.y"})
           )
-        ), 
-        React.createElement(TreeNode, {label: "Option 3", checkbox: true, id: "option_3"}), 
-        React.createElement(TreeNode, {label: "Option 4", checkbox: true, id: "option_3"})
+        )
       )
     );
   },
@@ -316,6 +314,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
+
 },{"../index":3,"react/addons":49}],2:[function(require,module,exports){
 var React = require('react');
 var App = require('./App.jsx');
@@ -323,12 +322,14 @@ var App = require('./App.jsx');
 
 React.render(React.createElement(App, null), document.getElementsByTagName('body')[0]);
 
+
 },{"./App.jsx":1,"react":210}],3:[function(require,module,exports){
 module.exports = {
   TreeMenu: require('./src/TreeMenu.jsx'),
   TreeNode: require('./src/TreeNode.jsx'),
   Utils: require('./src/TreeMenuUtils')
 };
+
 
 },{"./src/TreeMenu.jsx":211,"./src/TreeMenuUtils":212,"./src/TreeNode.jsx":213}],4:[function(require,module,exports){
 // shim for using process in browser
@@ -22004,8 +22005,10 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
    */
   _getDataFromChildren: function (children) {
 
+    var iterableChildren = Array.isArray(children) ? children : [children];
+
     var self = this;
-    return children.map(function (child) {
+    return iterableChildren.map(function (child) {
 
       var data = clone(omit(child.props, "children"));
 
@@ -22075,6 +22078,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
 
 module.exports = TreeMenu;
 
+
 },{"./TreeNode.jsx":213,"./TreeNodeMixin":214,"lodash/lang/clone":35,"lodash/object/omit":42,"object-assign":48,"react":210,"react/lib/invariant":189}],212:[function(require,module,exports){
 
 var TreeMenuUtils = {
@@ -22125,6 +22129,7 @@ var TreeMenuUtils = {
 };
 
 module.exports = TreeMenuUtils;
+
 
 },{}],213:[function(require,module,exports){
 var React = require('react/addons'),
@@ -22350,6 +22355,7 @@ var TreeNode = React.createClass({displayName: "TreeNode",
 
 module.exports = TreeNode;
 
+
 },{"./TreeNodeMixin":214,"lodash/utility/noop":47,"react/addons":49}],214:[function(require,module,exports){
 var TreeNodeMixin = {
 
@@ -22391,5 +22397,6 @@ var TreeNodeMixin = {
 
 
 module.exports = TreeNodeMixin;
+
 
 },{}]},{},[2]);

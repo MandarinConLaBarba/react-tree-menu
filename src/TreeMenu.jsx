@@ -58,8 +58,10 @@ var TreeMenu = React.createClass({
    */
   _getDataFromChildren: function (children) {
 
+    var iterableChildren = Array.isArray(children) ? children : [children];
+
     var self = this;
-    return children.map(function (child) {
+    return iterableChildren.map(function (child) {
 
       var data = clone(omit(child.props, "children"));
 

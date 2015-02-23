@@ -191,8 +191,6 @@ var App = React.createClass({
             <TreeNode label="Option B.y" checkbox={true} id="option_2.b.y"/>
           </TreeNode>
         </TreeNode>
-        <TreeNode label="Option 3" checkbox={true} id="option_3"/>
-        <TreeNode label="Option 4" checkbox={true} id="option_3"/>
       </TreeMenu>
     );
   },
