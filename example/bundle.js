@@ -1225,7 +1225,8 @@ function isIterateeCall(value, index, object) {
   } else {
     prereq = type == 'string' && index in object;
   }
-  return prereq && object[index] === value;
+  var other = object[index];
+  return prereq && (value === value ? value === other : other !== other);
 }
 
 module.exports = isIterateeCall;
@@ -1426,22 +1427,26 @@ var baseClone = require('../internal/baseClone'),
  * // => false
  *
  * // using a customizer callback
- * var body = _.clone(document.body, function(value) {
- *   return _.isElement(value) ? value.cloneNode(false) : undefined;
+ * var el = _.clone(document.body, function(value) {
+ *   if (_.isElement(value)) {
+ *     return value.cloneNode(false);
+ *   }
  * });
  *
- * body === document.body
+ * el === document.body
  * // => false
- * body.nodeName
+ * el.nodeName
  * // => BODY
- * body.childNodes.length;
+ * el.childNodes.length;
  * // => 0
  */
 function clone(value, isDeep, customizer, thisArg) {
-  // Juggle arguments.
-  if (typeof isDeep != 'boolean' && isDeep != null) {
+  if (isDeep && typeof isDeep != 'boolean' && isIterateeCall(value, isDeep, customizer)) {
+    isDeep = false;
+  }
+  else if (typeof isDeep == 'function') {
     thisArg = customizer;
-    customizer = isIterateeCall(value, isDeep, thisArg) ? null : isDeep;
+    customizer = isDeep;
     isDeep = false;
   }
   customizer = typeof customizer == 'function' && bindCallback(customizer, thisArg, 1);
@@ -1477,7 +1482,7 @@ var objToString = objectProto.toString;
  * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
  * @example
  *
- * (function() { return _.isArguments(arguments); })();
+ * _.isArguments(function() { return arguments; }());
  * // => true
  *
  * _.isArguments([1, 2, 3]);
@@ -1524,7 +1529,7 @@ var nativeIsArray = isNative(nativeIsArray = Array.isArray) && nativeIsArray;
  * _.isArray([1, 2, 3]);
  * // => true
  *
- * (function() { return _.isArray(arguments); })();
+ * _.isArray(function() { return arguments; }());
  * // => false
  */
 var isArray = nativeIsArray || function(value) {
@@ -1918,6 +1923,7 @@ module.exports = support;
  *
  * var object = { 'user': 'fred' };
  * var getter = _.constant(object);
+ *
  * getter() === object;
  * // => true
  */
@@ -1941,6 +1947,7 @@ module.exports = constant;
  * @example
  *
  * var object = { 'user': 'fred' };
+ *
  * _.identity(object) === object;
  * // => true
  */
@@ -1952,7 +1959,8 @@ module.exports = identity;
 
 },{}],47:[function(require,module,exports){
 /**
- * A no-operation function.
+ * A no-operation function which returns `undefined` regardless of the
+ * arguments it receives.
  *
  * @static
  * @memberOf _
@@ -1960,6 +1968,7 @@ module.exports = identity;
  * @example
  *
  * var object = { 'user': 'fred' };
+ *
  * _.noop(object) === undefined;
  * // => true
  */

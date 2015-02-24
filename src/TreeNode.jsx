@@ -116,7 +116,7 @@ var TreeNode = React.createClass({
           checked : state.checked
         })
       });
-    }
+    } 
 
     return (
       <div className={this._getRootCssClass() + "-children"}>

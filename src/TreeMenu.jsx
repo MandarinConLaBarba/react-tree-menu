@@ -28,7 +28,6 @@ var TreeMenu = React.createClass({
     collapseIconClass: React.PropTypes.string,
     data: React.PropTypes.array
     //TODO: make sure children are of TreeNode type?
-
   },
 
   getDefaultProps: function () {
@@ -43,7 +42,7 @@ var TreeMenu = React.createClass({
     var props = this.props;
 
     return (
-      <div className={props.classNamePrefix + "-root"}>
+      <div className={props.classNamePrefix}>
         {this._getTreeNodes()}
       </div>);
 
