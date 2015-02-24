@@ -113,23 +113,13 @@ var data = [{
 
 ## `<TreeMenu/>` Style Guide
 
-To style `<TreeMenu/>`, pass in the `classNamePrefix` prop. The following classes are available for use in CSS:
+To style `<TreeMenu/>`, use the following props:
 
+* [classNamePrefix](#classnameprefixstring)
+* [expandIconClass](#expandiconclassstring)
+* [collapseIconClass](#collapseiconclassstring)
 
-| ClassName                                                    | Description                                                            |
-|--------------------------------------------------------------|------------------------------------------------------------------------|
-| `<classNamePrefix>-root`                                     | The outer container                                                    |
-| `<classNamePrefix>-node-collapse-toggle.collapse-spacer`     | Used to provide spacing when a parent node has no children             |
-| `<classNamePrefix>-node-collapse-toggle.<expandIconClass>`   | The class to use for the icon that collapses a parent node             |
-| `<classNamePrefix>-node-collapse-toggle.<collapseIconClass>` | The class to use for the icon that expands a parent node               |
-| `<classNamePrefix>-node-label`                               | The class for a node label                                             |
-| `<classNamePrefix>-node-checkbox`                            | The class for a node checkbox                                          |
-| `<classNamePrefix>-node-children`                            | The class for a nodes children container                               |
-* 
-* 
-* 
-* 
-* 
+See the [example CSS](example/tree-view.css) for how this works.
 
 ## `<TreeMenu/>` Props
 
