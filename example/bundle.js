@@ -1225,8 +1225,7 @@ function isIterateeCall(value, index, object) {
   } else {
     prereq = type == 'string' && index in object;
   }
-  var other = object[index];
-  return prereq && (value === value ? value === other : other !== other);
+  return prereq && object[index] === value;
 }
 
 module.exports = isIterateeCall;
@@ -1427,26 +1426,22 @@ var baseClone = require('../internal/baseClone'),
  * // => false
  *
  * // using a customizer callback
- * var el = _.clone(document.body, function(value) {
- *   if (_.isElement(value)) {
- *     return value.cloneNode(false);
- *   }
+ * var body = _.clone(document.body, function(value) {
+ *   return _.isElement(value) ? value.cloneNode(false) : undefined;
  * });
  *
- * el === document.body
+ * body === document.body
  * // => false
- * el.nodeName
+ * body.nodeName
  * // => BODY
- * el.childNodes.length;
+ * body.childNodes.length;
  * // => 0
  */
 function clone(value, isDeep, customizer, thisArg) {
-  if (isDeep && typeof isDeep != 'boolean' && isIterateeCall(value, isDeep, customizer)) {
-    isDeep = false;
-  }
-  else if (typeof isDeep == 'function') {
+  // Juggle arguments.
+  if (typeof isDeep != 'boolean' && isDeep != null) {
     thisArg = customizer;
-    customizer = isDeep;
+    customizer = isIterateeCall(value, isDeep, thisArg) ? null : isDeep;
     isDeep = false;
   }
   customizer = typeof customizer == 'function' && bindCallback(customizer, thisArg, 1);
@@ -1482,7 +1477,7 @@ var objToString = objectProto.toString;
  * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
  * @example
  *
- * _.isArguments(function() { return arguments; }());
+ * (function() { return _.isArguments(arguments); })();
  * // => true
  *
  * _.isArguments([1, 2, 3]);
@@ -1529,7 +1524,7 @@ var nativeIsArray = isNative(nativeIsArray = Array.isArray) && nativeIsArray;
  * _.isArray([1, 2, 3]);
  * // => true
  *
- * _.isArray(function() { return arguments; }());
+ * (function() { return _.isArray(arguments); })();
  * // => false
  */
 var isArray = nativeIsArray || function(value) {
@@ -1923,7 +1918,6 @@ module.exports = support;
  *
  * var object = { 'user': 'fred' };
  * var getter = _.constant(object);
- *
  * getter() === object;
  * // => true
  */
@@ -1947,7 +1941,6 @@ module.exports = constant;
  * @example
  *
  * var object = { 'user': 'fred' };
- *
  * _.identity(object) === object;
  * // => true
  */
@@ -1959,8 +1952,7 @@ module.exports = identity;
 
 },{}],47:[function(require,module,exports){
 /**
- * A no-operation function which returns `undefined` regardless of the
- * arguments it receives.
+ * A no-operation function.
  *
  * @static
  * @memberOf _
@@ -1968,7 +1960,6 @@ module.exports = identity;
  * @example
  *
  * var object = { 'user': 'fred' };
- *
  * _.noop(object) === undefined;
  * // => true
  */
@@ -21984,7 +21975,6 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     collapseIconClass: React.PropTypes.string,
     data: React.PropTypes.array
     //TODO: make sure children are of TreeNode type?
-
   },
 
   getDefaultProps: function () {
@@ -21999,7 +21989,7 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     var props = this.props;
 
     return (
-      React.createElement("div", {className: props.classNamePrefix + "-root"}, 
+      React.createElement("div", {className: props.classNamePrefix}, 
         this._getTreeNodes()
       ));
 
@@ -22259,7 +22249,7 @@ var TreeNode = React.createClass({displayName: "TreeNode",
           checked : state.checked
         })
       });
-    }
+    } 
 
     return (
       React.createElement("div", {className: this._getRootCssClass() + "-children"}, 
