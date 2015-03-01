@@ -5,7 +5,8 @@ var React = require('react'),
   clone = require('lodash/lang/clone'),
   omit = require('lodash/object/omit'),
   invariant = require('react/lib/invariant'),
-  assign = require('object-assign');
+  assign = require('object-assign'),
+  map = require('lodash/collection/map');
 
 /**
  * The root component for a tree view. Can have one or many <TreeNode/> children
@@ -26,8 +27,10 @@ var TreeMenu = React.createClass({
     collapsible: React.PropTypes.bool,
     expandIconClass: React.PropTypes.string,
     collapseIconClass: React.PropTypes.string,
-    data: React.PropTypes.array
-    //TODO: make sure children are of TreeNode type?
+    data: React.PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.object
+    ])
   },
 
   getDefaultProps: function () {
@@ -102,10 +105,12 @@ var TreeMenu = React.createClass({
         ancestor = [];
       }
 
-      return data.map(function(dataForNode, i) {
+      return map(data, function(dataForNode, i) {
 
         var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange"]),
           children = [];
+
+        nodeProps.label = nodeProps.label || i;
 
         if (dataForNode.children) {
           children = dataToNodes(dataForNode.children, ancestor.concat(thisComponent.getNodeId(treeMenuProps, nodeProps, i)));

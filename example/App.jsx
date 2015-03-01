@@ -1,7 +1,9 @@
 var React = require('react/addons'),
   TreeMenu = require('../index').TreeMenu,
   TreeNode = require('../index').TreeNode,
-  TreeMenuUtils = require('../index').Utils;
+  TreeMenuUtils = require('../index').Utils,
+  Immutable = require('immutable'),
+  _ = require('lodash');
 
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -47,7 +49,36 @@ var App = React.createClass({
             }
           ]
         }
-      ]
+      ],
+      dynamicTreeDataMap: {
+        "Option 1" : {
+          checked: true,
+          checkbox: true,
+          children: {
+            "Sub Option 1" : {
+              checked: false
+            },
+            "Sub Option 2" : {
+              checked: false,
+              checkbox: true,
+              children: {
+                "Sub-Sub Option 1" : {
+                  checked: false,
+                  checkbox: true
+                },
+                "Sub-Sub Option 2" : {
+                  checked: false,
+                  checkbox: true
+                }
+              }
+            }
+          }
+        },
+        "Option 2" : {
+          checked: false,
+          checkbox: true
+        }
+      }
     };
   },
 
@@ -69,9 +100,9 @@ var App = React.createClass({
 
       <div className="row">
         <div className="col-lg-3">
-          <h2>Dynamic</h2>
+          <h2>Dynamic (Array)</h2>
           <ul>
-            <li>This menu is built dynamically using the data prop</li>
+            <li>This menu is built dynamically using the data prop (array)</li>
             <li>It is collapsible (the default), so expand/collapse icons show</li>
             <li>It has no identifier prop for the TreeMenu, so it uses the array index when emitting events</li>
           </ul>
@@ -146,6 +177,33 @@ var App = React.createClass({
         </div>
       </div>
 
+      <div className="row">
+        <div className="col-lg-3">
+          <h2>Dynamic (Object)</h2>
+          <ul>
+            <li>This menu is built dynamically using the data prop (object)</li>
+            <li>It is collapsible (the default), so expand/collapse icons show</li>
+            <li>It has no identifier prop for the TreeMenu, so it uses the object key when emitting events</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div className="row">
+        <div className="col-lg-3">
+          {this._getExamplePanel("Dynamic (Map Data)", this._getDynamicTreeExample2())}
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-lg-3">
+          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+            {this._getLastActionNode("5")}
+          </CSSTransitionGroup>
+        </div>
+
+      </div>
+
     </div>;
 
   },
@@ -170,7 +228,6 @@ var App = React.createClass({
     return lastActionNode;
 
   },
-
 
   _getStatefulTreeExample: function () {
 
@@ -252,6 +309,20 @@ var App = React.createClass({
 
   },
 
+  _getDynamicTreeExample2: function () {
+
+    return  (
+      <TreeMenu
+        expandIconClass="fa fa-chevron-right"
+        collapseIconClass="fa fa-chevron-down"
+        onTreeNodeClick={this._setLastActionState.bind(this, "clicked", "5")}
+        onTreeNodeCollapseChange={this._handleDynamicTreeNodePropChange2.bind(this, "collapsed")}
+        onTreeNodeCheckChange={this._handleDynamicTreeNodePropChange2.bind(this, "checked")}
+        data={this.state.dynamicTreeDataMap} />
+    );
+
+  },
+
   _getExamplePanel: function (title, treeMenuNode) {
     return <div>
       <div className="panel panel-default">
@@ -284,6 +355,51 @@ var App = React.createClass({
     this._setLastActionState(propName, "1", lineage);
 
     this.setState(TreeMenuUtils.getNewTreeState(lineage, this.state.dynamicTreeData, propName));
+
+  },
+
+
+  _handleDynamicTreeNodePropChange2: function (propName, lineage) {
+
+    this._setLastActionState(propName, "5", lineage);
+
+    function getNodePath(nodeKey) {
+
+      if (nodeKey.length === 1) return nodeKey;
+
+      return _(nodeKey).zip(nodeKey.map(function () {
+        return "children";
+      })).flatten().initial().value();
+
+    }
+
+    function syncChildren(immutableState, prop, state) {
+      var childKeyPath = nodePath.concat('children');
+
+      var children = immutableState.getIn(childKeyPath);
+
+      if (!children || children.size === 0) return immutableState;
+
+      var newChildren = children.map(function (val) {
+        return val.set(prop, state);
+      });
+
+      return immutableState.setIn(childKeyPath, newChildren);
+    }
+
+    var nodePath = getNodePath(lineage),
+      keyPath = nodePath.concat([propName]);
+
+    var newState =
+      Immutable.fromJS(this.state.dynamicTreeDataMap).updateIn(keyPath, function (value) {
+        return !value;
+      });
+
+    newState = syncChildren(newState, propName, newState.getIn(keyPath));
+
+    this.setState({
+      dynamicTreeDataMap: newState.toJS()
+    });
 
   },
 
