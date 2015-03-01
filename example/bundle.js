@@ -80,6 +80,7 @@ var App = React.createClass({displayName: "App",
           checkbox: true
         }
       }
+
     };
   },
 
@@ -364,6 +365,7 @@ var App = React.createClass({displayName: "App",
 
     this._setLastActionState(propName, "5", lineage);
 
+    //Get a node path that includes children, given a key
     function getNodePath(nodeKey) {
 
       if (nodeKey.length === 1) return nodeKey;
@@ -374,29 +376,35 @@ var App = React.createClass({displayName: "App",
 
     }
 
-    function syncChildren(immutableState, prop, state) {
-      var childKeyPath = nodePath.concat('children');
+    var oldState = Immutable.fromJS(this.state.dynamicTreeDataMap);
+    var nodePath = getNodePath(lineage),
+      keyPaths = [nodePath.concat([propName])];
 
-      var children = immutableState.getIn(childKeyPath);
+    //Build a list of key paths for all children
+    function addChildKeys(state, parentPath) {
 
-      if (!children || children.size === 0) return immutableState;
+      var childrenPath = parentPath.concat('children'),
+        children = state.getIn(childrenPath);
 
-      var newChildren = children.map(function (val) {
-        return val.set(prop, state);
+      if (!children || children.size === 0) return;
+
+      children.map(function (value, key) {
+        keyPaths.push(childrenPath.concat([key, propName]))
+        addChildKeys(state, childrenPath.concat([key]));
       });
-
-      return immutableState.setIn(childKeyPath, newChildren);
     }
 
-    var nodePath = getNodePath(lineage),
-      keyPath = nodePath.concat([propName]);
+    addChildKeys(oldState, nodePath);
 
-    var newState =
-      Immutable.fromJS(this.state.dynamicTreeDataMap).updateIn(keyPath, function (value) {
-        return !value;
-      });
+    //Get the new prop state
+    var newPropState = !oldState.getIn(keyPaths[0]);
 
-    newState = syncChildren(newState, propName, newState.getIn(keyPath));
+    //Now create a new map w/ all the changes
+    var newState = oldState.withMutations(function(state) {
+      keyPaths.forEach(function (keyPath) {
+        state.setIn(keyPath, newPropState);
+      })
+    });
 
     this.setState({
       dynamicTreeDataMap: newState.toJS()
