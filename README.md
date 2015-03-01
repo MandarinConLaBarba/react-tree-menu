@@ -160,11 +160,11 @@ Function handler for collapse change event on <TreeNode /> components. See [Call
 
 Function handler for checkbox change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
 
-### `data={<Array>}`
+### `data={<Array>||<Object>}`
 
 The data to use when building <TreeNode/> components dynamically. Required if there aren't any nested `<TreeNode/>` elements declared.
 
-Sample format:
+Sample array format:
 
 ```
 
@@ -185,6 +185,42 @@ Sample format:
          checkbox: true,
          label: "Sub Option B"
         }]}]
+
+```
+
+Sample object format:
+
+```
+
+    {
+        "Option 1" : {
+          checked: true,
+          checkbox: true,
+          children: {
+            "Sub Option 1" : {
+              checked: false
+            },
+            "Sub Option 2" : {
+              checked: false,
+              checkbox: true,
+              children: {
+                "Sub-Sub Option 1" : {
+                  checked: false,
+                  checkbox: true
+                },
+                "Sub-Sub Option 2" : {
+                  checked: false,
+                  checkbox: true
+                }
+              }
+            }
+          }
+        },
+        "Option 2" : {
+          checked: false,
+          checkbox: true
+        }
+      }
 
 ```
 

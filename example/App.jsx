@@ -79,6 +79,7 @@ var App = React.createClass({
           checkbox: true
         }
       }
+
     };
   },
 
