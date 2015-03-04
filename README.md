@@ -150,7 +150,7 @@ The CSS class to give the collapse icon component. Empty by default
 
 ### `onTreeNodeClick={<Function>}`
 
-Function handler for click event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
+Function handler for click event on <TreeNode /> components. If the `TreeNode` has an `onTreeNodeSelectChange` handler, this is not fired. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
 
 ### `onTreeNodeCollapseChange={<Function>}`
 
@@ -159,6 +159,10 @@ Function handler for collapse change event on <TreeNode /> components. See [Call
 ### `onTreeNodeCheckChange={<Function>}`
 
 Function handler for checkbox change event on <TreeNode /> components. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
+
+### `onTreeNodeSelectChange={<Function>}`
+
+Function handler for select state change event on <TreeNode /> components. An alternative for cases when checkboxes aren't desired. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
 
 ### `data={<Array>||<Object>}`
 
@@ -256,6 +260,10 @@ Whether or not the node has a checkbox. Defaults to false. If the node checkbox=
 
 If the node has a checkbox, whether or not the node is checked. If the node checkbox={true}, clicking on the label also fires the `onTreeNodeCheckChange`
 function instead od the `onTreeNodeClick` function
+
+### `selected={<Boolean>}`
+
+Whether or not the node is selected. An alternative to using `checked` in conjunction w/ `checkbox`.
 
 ### `collapsible={<Boolean>}`
 
