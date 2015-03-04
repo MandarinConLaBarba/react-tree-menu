@@ -25,6 +25,7 @@ var TreeNode = React.createClass({
     classNamePrefix: React.PropTypes.string,
     onClick: React.PropTypes.func,
     onCheckChange: React.PropTypes.func,
+    onSelectChange: React.PropTypes.func,
     onCollapseChange: React.PropTypes.func
 
   },
@@ -43,7 +44,7 @@ var TreeNode = React.createClass({
         console.log("Tree Node clicked: " + lineage.join(" > "));
       },
       onCheckChange: function (lineage) {
-        console.log("Tree Node indicating a checkbox should change: " + lineage.join(" > "));
+        console.log("Tree Node indicating a checkbox check state should change: " + lineage.join(" > "));
       },
       onCollapseChange: function (lineage) {
         console.log("Tree Node indicating collapse state should change: " + lineage.join(" > "));
@@ -129,7 +130,13 @@ var TreeNode = React.createClass({
   _getLabelNode: function () {
 
     var props = this.props,
-      labelNode = <label className={props.classNamePrefix + "-node-label"}>{props.label}</label>;
+      labelClassName = props.classNamePrefix + "-node-label";
+
+    if (this._isSelected()) {
+      labelClassName += " selected";
+    }
+
+    var labelNode = <label className={labelClassName}>{props.label}</label>;
 
     return (
       <span onClick={this._handleClick}>
@@ -163,6 +170,13 @@ var TreeNode = React.createClass({
 
   },
 
+  _isSelected: function () {
+
+    if (this._isStateful() && typeof this.state.selected !== "undefined") return this.state.selected;
+    return this.props.selected;
+
+  },
+
   _isCollapsed: function () {
 
     if (!this.props.collapsible) return false;
@@ -174,6 +188,8 @@ var TreeNode = React.createClass({
   _handleClick: function () {
     if (this.props.checkbox) {
       return this._handleCheckChange();
+    } else if (this.props.onSelectChange) {
+      return this._handleSelectChange();
     }
 
     this.props.onClick(this._getLineage());
@@ -199,6 +215,14 @@ var TreeNode = React.createClass({
     this._toggleNodeStateIfStateful("checked");
 
     this.props.onCheckChange(this._getLineage());
+
+  },
+
+  _handleSelectChange: function () {
+
+    this._toggleNodeStateIfStateful("selected");
+
+    this.props.onSelectChange(this._getLineage());
 
   },
 

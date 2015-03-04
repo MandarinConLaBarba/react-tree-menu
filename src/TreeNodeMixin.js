@@ -24,6 +24,7 @@ var TreeNodeMixin = {
       stateful: rootProps.stateful,
       onClick: rootProps.onTreeNodeClick,
       onCheckChange: rootProps.onTreeNodeCheckChange,
+      onSelectChange: rootProps.onTreeNodeSelectChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
       id: this.getNodeId(rootProps, props, childIndex),
       key: "tree-node-" + ancestor.join(".") + childIndex

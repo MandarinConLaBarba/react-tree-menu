@@ -24,6 +24,7 @@ var TreeMenu = React.createClass({
     identifier: React.PropTypes.string,
     onTreeNodeClick: React.PropTypes.func,
     onTreeNodeCheckChange: React.PropTypes.func,
+    onTreeNodeSelectChange: React.PropTypes.func,
     collapsible: React.PropTypes.bool,
     expandIconClass: React.PropTypes.string,
     collapseIconClass: React.PropTypes.string,

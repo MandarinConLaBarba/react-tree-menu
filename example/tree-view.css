@@ -60,6 +60,19 @@ The class to use for the icon that collapses an expanded parent node
 */
 .tree-view-node-label {
     margin-left: 3px;
+    padding: 1px;
+    border: 1px solid #fff;
+}
+
+/*
+
+<classNamePrefix>-node-label.selected
+
+*/
+.tree-view-node-label.selected {
+    border: 1px solid #003f81;
+    border-radius: 3px;
+    background-color: #808080;
 }
 
 /*

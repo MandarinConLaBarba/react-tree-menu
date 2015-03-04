@@ -1,9 +1,10 @@
 var React = require('react/addons'),
-  TreeMenu = require('../index').TreeMenu,
+  TreeMenu = require('../index'),
   TreeNode = require('../index').TreeNode,
   TreeMenuUtils = require('../index').Utils,
   Immutable = require('immutable'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  JSXView = require('react-jsx-view');
 
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -78,12 +79,44 @@ var App = React.createClass({
           checked: false,
           checkbox: true
         }
+      },
+      dynamicTreeDataMap2: {
+        "Option 1" : {
+          checkbox: false,
+          children: {
+            "Sub Option 1" : {
+              checkbox: false
+            },
+            "Sub Option 2" : {
+              checkbox: false,
+              children: {
+                "Sub-Sub Option 1" : {
+                  selected: true,
+                  checkbox: false
+                },
+                "Sub-Sub Option 2" : {
+                  checkbox: false
+                }
+              }
+            }
+          }
+        },
+        "Option 2" : {
+          checkbox: false
+        }
       }
 
     };
   },
 
   render: function() {
+
+    var dynamicExample1 = this._getExamplePanel("Dynamic", this._getDynamicTreeExample()),
+      declarativeExample = this._getExamplePanel("Declarative", this._getDeclarativeTreeExample()),
+      unboundExample = this._getExamplePanel("Unbound", this._getUnboundTreeExample()),
+      statefulExample = this._getExamplePanel("Stateful", this._getStatefulTreeExample()),
+      dynamicExample2 = this._getExamplePanel("Dynamic (Object)", this._getDynamicTreeExample2()),
+      dynamicExample3 = this._getExamplePanel("Selection w/o Checkboxes", this._getDynamicTreeExample3());
 
     return <div className="container">
 
@@ -135,19 +168,19 @@ var App = React.createClass({
 
       <div className="row">
         <div className="col-lg-3">
-          {this._getExamplePanel("Dynamic", this._getDynamicTreeExample())}
+          {dynamicExample1}
         </div>
 
         <div className="col-lg-3">
-          {this._getExamplePanel("Declarative", this._getDeclarativeTreeExample())}
+          {declarativeExample}
         </div>
 
         <div className="col-lg-3">
-          {this._getExamplePanel("Unbound", this._getUnboundTreeExample())}
+          {unboundExample}
         </div>
 
         <div className="col-lg-3">
-          {this._getExamplePanel("Stateful", this._getStatefulTreeExample())}
+          {statefulExample}
         </div>
       </div>
 
@@ -188,11 +221,22 @@ var App = React.createClass({
           </ul>
         </div>
 
+        <div className="col-lg-3">
+          <h2>Dynamic - No Checkboxes</h2>
+          <ul>
+            <li>This menu is built dynamically using the data prop (object)</li>
+            <li>It doesn't have checkboxes, but does have selection state</li>
+          </ul>
+        </div>
+
       </div>
 
       <div className="row">
         <div className="col-lg-3">
-          {this._getExamplePanel("Dynamic (Map Data)", this._getDynamicTreeExample2())}
+          {dynamicExample2}
+        </div>
+        <div className="col-lg-3">
+          {dynamicExample3}
         </div>
       </div>
 
@@ -202,7 +246,11 @@ var App = React.createClass({
             {this._getLastActionNode("5")}
           </CSSTransitionGroup>
         </div>
-
+        <div className="col-lg-3">
+          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+            {this._getLastActionNode("6")}
+          </CSSTransitionGroup>
+        </div>
       </div>
 
     </div>;
@@ -211,7 +259,7 @@ var App = React.createClass({
 
   _getLastActionNode: function (col) {
 
-    var lastActionNode = null,
+    var lastActionNode = <div className="text-center alert alert-success tree-event-alert">{"Waiting for interaction"}</div>,
       key = "lastAction" + col;
 
     var action = this.state[key];
@@ -224,6 +272,8 @@ var App = React.createClass({
           <h3><code>{"<TreeNode/>"}</code> Affected: </h3>
           <div><strong>{action.node}</strong></div>
         </div>);
+    } else {
+
     }
 
     return lastActionNode;
@@ -317,9 +367,23 @@ var App = React.createClass({
         expandIconClass="fa fa-chevron-right"
         collapseIconClass="fa fa-chevron-down"
         onTreeNodeClick={this._setLastActionState.bind(this, "clicked", "5")}
-        onTreeNodeCollapseChange={this._handleDynamicTreeNodePropChange2.bind(this, "collapsed")}
-        onTreeNodeCheckChange={this._handleDynamicTreeNodePropChange2.bind(this, "checked")}
+        onTreeNodeCollapseChange={this._handleDynamicObjectTreeNodePropChange.bind(this, 5, "dynamicTreeDataMap","collapsed")}
+        onTreeNodeCheckChange={this._handleDynamicObjectTreeNodePropChange.bind(this, 5, "dynamicTreeDataMap","checked")}
         data={this.state.dynamicTreeDataMap} />
+    );
+
+  },
+
+  _getDynamicTreeExample3: function () {
+
+    return  (
+      <TreeMenu
+        expandIconClass="fa fa-chevron-right"
+        collapseIconClass="fa fa-chevron-down"
+        onTreeNodeCollapseChange={this._handleDynamicObjectTreeNodePropChange.bind(this, 6, "dynamicTreeDataMap2", "collapsed")}
+        onTreeNodeCheckChange={this._handleDynamicObjectTreeNodePropChange.bind(this, 6, "dynamicTreeDataMap2","checked")}
+        onTreeNodeSelectChange={this._handleDynamicObjectTreeNodePropChange.bind(this, 6, "dynamicTreeDataMap2","selected")}
+        data={this.state.dynamicTreeDataMap2} />
     );
 
   },
@@ -360,9 +424,9 @@ var App = React.createClass({
   },
 
 
-  _handleDynamicTreeNodePropChange2: function (propName, lineage) {
+  _handleDynamicObjectTreeNodePropChange: function (messageWindowKey, stateKey, propName, lineage) {
 
-    this._setLastActionState(propName, "5", lineage);
+    this._setLastActionState(propName, messageWindowKey, lineage);
 
     //Get a node path that includes children, given a key
     function getNodePath(nodeKey) {
@@ -375,7 +439,7 @@ var App = React.createClass({
 
     }
 
-    var oldState = Immutable.fromJS(this.state.dynamicTreeDataMap);
+    var oldState = Immutable.fromJS(this.state[stateKey]);
     var nodePath = getNodePath(lineage),
       keyPaths = [nodePath.concat([propName])];
 
@@ -405,15 +469,17 @@ var App = React.createClass({
       })
     });
 
-    this.setState({
-      dynamicTreeDataMap: newState.toJS()
-    });
+    var mutation = {};
+
+    mutation[stateKey] = newState.toJS();
+
+    this.setState(mutation);
 
   },
 
   _setLastActionState: function (action, col, node) {
 
-    var toggleEvents = ["collapsed", "checked"];
+    var toggleEvents = ["collapsed", "checked", "selected"];
 
     if (toggleEvents.indexOf(action) >= 0) {
       action += "Changed";
