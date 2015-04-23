@@ -117,7 +117,8 @@ var App = React.createClass({displayName: "App",
       unboundExample = this._getExamplePanel("Unbound", this._getUnboundTreeExample()),
       statefulExample = this._getExamplePanel("Stateful", this._getStatefulTreeExample()),
       dynamicExample2 = this._getExamplePanel("Dynamic (Object)", this._getDynamicTreeExample2()),
-      dynamicExample3 = this._getExamplePanel("Selection w/o Checkboxes", this._getDynamicTreeExample3());
+      dynamicExample3 = this._getExamplePanel("Selection w/o Checkboxes", this._getDynamicTreeExample3()),
+      labelFilterExample = this._getExamplePanel("Label Filter", this._getLabelFilterExample());
 
     return React.createElement("div", {className: "container"}, 
 
@@ -228,6 +229,12 @@ var App = React.createClass({displayName: "App",
             React.createElement("li", null, "This menu is built dynamically using the data prop (object)"), 
             React.createElement("li", null, "It doesn't have checkboxes, but does have selection state")
           )
+        ), 
+        React.createElement("div", {className: "col-lg-3"}, 
+          React.createElement("h2", null, "Label Filter"), 
+          React.createElement("ul", null, 
+            React.createElement("li", null, "This menu has a labelFilter prop that truncates the displayed label")
+          )
         )
 
       ), 
@@ -238,6 +245,9 @@ var App = React.createClass({displayName: "App",
         ), 
         React.createElement("div", {className: "col-lg-3"}, 
           dynamicExample3
+        ), 
+        React.createElement("div", {className: "col-lg-3"}, 
+          labelFilterExample
         )
       ), 
 
@@ -343,6 +353,34 @@ var App = React.createClass({displayName: "App",
         ), 
         React.createElement(TreeNode, {label: "Option 3", id: "option_3"}), 
         React.createElement(TreeNode, {label: "Option 4", id: "option_4"})
+      )
+    );
+  },
+
+  _getLabelFilterExample: function () {
+
+    return (
+      React.createElement(TreeMenu, {
+        identifier: "id", 
+        onTreeNodeClick: function() {}, 
+        onTreeNodeCollapseChange: function() {}, 
+        onTreeNodeCheckChange: function() {}, 
+        collapsible: false, 
+        labelFilter: function(label) {
+          var max = 10;
+          if (label.length <= max) return label;
+
+          return label.substring(label, max).concat("...");
+        }, 
+        expandIconClass: "fa fa-chevron-right", 
+        collapseIconClass: "fa fa-chevron-down"}, 
+        React.createElement(TreeNode, {label: "Option 1 with a long name", id: "option_1"}), 
+        React.createElement(TreeNode, {label: "Option 2 also has a long name", id: "option_2"}, 
+          React.createElement(TreeNode, {label: "Option A with a long name", checkbox: true, checked: this.state.staticTreeData["option_2.a"].checked, id: "option_2.a"}), 
+          React.createElement(TreeNode, {label: "Option B with a long name", checkbox: true, checked: this.state.staticTreeData["option_2.b"].checked, id: "option_2.b"})
+        ), 
+        React.createElement(TreeNode, {label: "Option 3 with a long name", id: "option_3"}), 
+        React.createElement(TreeNode, {label: "Option 4 with a long name", id: "option_4"})
       )
     );
   },
@@ -39284,7 +39322,8 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
     data: React.PropTypes.oneOfType([
       React.PropTypes.array,
       React.PropTypes.object
-    ])
+    ]),
+    labelFilter: React.PropTypes.func
   },
 
   getDefaultProps: function () {
@@ -39471,7 +39510,8 @@ var TreeNode = React.createClass({displayName: "TreeNode",
     onClick: React.PropTypes.func,
     onCheckChange: React.PropTypes.func,
     onSelectChange: React.PropTypes.func,
-    onCollapseChange: React.PropTypes.func
+    onCollapseChange: React.PropTypes.func,
+    labelFilter: React.PropTypes.func
 
   },
 
@@ -39581,7 +39621,11 @@ var TreeNode = React.createClass({displayName: "TreeNode",
       labelClassName += " selected";
     }
 
-    var labelNode = React.createElement("label", {className: labelClassName}, props.label);
+    var displayLabel = props.label;
+
+    if (props.labelFilter) displayLabel = props.labelFilter(displayLabel);
+
+    var labelNode = React.createElement("label", {className: labelClassName}, displayLabel);
 
     return (
       React.createElement("span", {onClick: this._handleClick}, 
@@ -39720,6 +39764,7 @@ var TreeNodeMixin = {
       onCheckChange: rootProps.onTreeNodeCheckChange,
       onSelectChange: rootProps.onTreeNodeSelectChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
+      labelFilter: rootProps.labelFilter,
       id: this.getNodeId(rootProps, props, childIndex),
       key: "tree-node-" + ancestor.join(".") + childIndex
     };

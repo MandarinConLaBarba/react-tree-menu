@@ -26,7 +26,8 @@ var TreeNode = React.createClass({
     onClick: React.PropTypes.func,
     onCheckChange: React.PropTypes.func,
     onSelectChange: React.PropTypes.func,
-    onCollapseChange: React.PropTypes.func
+    onCollapseChange: React.PropTypes.func,
+    labelFilter: React.PropTypes.func
 
   },
 
@@ -136,7 +137,11 @@ var TreeNode = React.createClass({
       labelClassName += " selected";
     }
 
-    var labelNode = <label className={labelClassName}>{props.label}</label>;
+    var displayLabel = props.label;
+
+    if (props.labelFilter) displayLabel = props.labelFilter(displayLabel);
+
+    var labelNode = <label className={labelClassName}>{displayLabel}</label>;
 
     return (
       <span onClick={this._handleClick}>

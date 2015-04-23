@@ -31,7 +31,8 @@ var TreeMenu = React.createClass({
     data: React.PropTypes.oneOfType([
       React.PropTypes.array,
       React.PropTypes.object
-    ])
+    ]),
+    labelFilter: React.PropTypes.func
   },
 
   getDefaultProps: function () {

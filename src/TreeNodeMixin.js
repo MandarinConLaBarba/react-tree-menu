@@ -26,6 +26,7 @@ var TreeNodeMixin = {
       onCheckChange: rootProps.onTreeNodeCheckChange,
       onSelectChange: rootProps.onTreeNodeSelectChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
+      labelFilter: rootProps.labelFilter,
       id: this.getNodeId(rootProps, props, childIndex),
       key: "tree-node-" + ancestor.join(".") + childIndex
     };

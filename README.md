@@ -148,6 +148,10 @@ The CSS class to give the expand icon component. Empty by default.
 
 The CSS class to give the collapse icon component. Empty by default
 
+### `labelFilter={<Function>}`
+
+A function that can be used to filter/transform the label. Empty by default
+
 ### `onTreeNodeClick={<Function>}`
 
 Function handler for click event on <TreeNode /> components. If the `TreeNode` has an `onTreeNodeSelectChange` handler, this is not fired. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
