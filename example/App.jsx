@@ -375,8 +375,8 @@ var App = React.createClass({
         collapseIconClass="fa fa-chevron-down">
         <TreeNode label="Option 1 with a long name" id="option_1"/>
         <TreeNode label="Option 2 also has a long name" id="option_2">
-          <TreeNode label="Option A with a long name" checkbox={true} checked={this.state.staticTreeData["option_2.a"].checked} id="option_2.a"/>
-          <TreeNode label="Option B with a long name" checkbox={true} checked={this.state.staticTreeData["option_2.b"].checked} id="option_2.b"/>
+          <TreeNode label="Option A with a long name" checkbox={true} id="option_2.a"/>
+          <TreeNode label="Option B with a long name" checkbox={true} id="option_2.b"/>
         </TreeNode>
         <TreeNode label="Option 3 with a long name" id="option_3"/>
         <TreeNode label="Option 4 with a long name" id="option_4"/>
