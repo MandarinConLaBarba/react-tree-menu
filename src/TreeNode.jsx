@@ -77,7 +77,10 @@ var TreeNode = React.createClass({
     return (
       <div className={rootClass}>
         {collapseNode}
-        {this._getLabelNode()}
+        <span onClick={this._handleClick}>
+          {this._getCheckboxNode()}
+          {this._getLabelNode()}
+        </span>
         {this._getChildrenNode()}
       </div>);
 
@@ -141,14 +144,7 @@ var TreeNode = React.createClass({
 
     if (props.labelFilter) displayLabel = props.labelFilter(displayLabel);
 
-    var labelNode = <label className={labelClassName}>{displayLabel}</label>;
-
-    return (
-      <span onClick={this._handleClick}>
-        {this._getCheckboxNode()}
-        {labelNode}
-      </span>
-    );
+    return <label className={labelClassName}>{displayLabel}</label>;
   },
 
   _getCheckboxNode: function () {
