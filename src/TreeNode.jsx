@@ -55,15 +55,13 @@ var TreeNode = React.createClass({
       collapseIconClass: ""
     }
   },
-
-  render : function () {
-
+  
+  _getCollapseNode: function() {
     var props = this.props,
-      collapseNode = null,
-      rootClass = this._getRootCssClass();
+      collapseNode = null;
 
     if (props.collapsible) {
-      var collapseClassName = rootClass + "-collapse-toggle ";
+      var collapseClassName = this._getRootCssClass() + "-collapse-toggle ";
       var collapseToggleHandler = this._handleCollapseChange;
       if (!props.children || props.children.length === 0) {
         collapseToggleHandler = noop;
@@ -73,17 +71,20 @@ var TreeNode = React.createClass({
       }
       collapseNode = <span onClick={collapseToggleHandler} className={collapseClassName}></span>
     }
+    return collapseNode;
+  },
 
+  render : function () {
     return (
-      <div className={rootClass}>
-        {collapseNode}
+      <div className={this._getRootCssClass()}>
+        {this._getCollapseNode()}
         <span onClick={this._handleClick}>
           {this._getCheckboxNode()}
           {this._getLabelNode()}
         </span>
         {this._getChildrenNode()}
-      </div>);
-
+      </div>
+    );
   },
 
   componentWillReceiveProps: function (nextProps) {
