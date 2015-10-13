@@ -27,7 +27,9 @@ var TreeNode = React.createClass({
     onCheckChange: React.PropTypes.func,
     onSelectChange: React.PropTypes.func,
     onCollapseChange: React.PropTypes.func,
-    labelFilter: React.PropTypes.func
+    labelFilter: React.PropTypes.func,
+    labelFactory: React.PropTypes.func,
+    checkboxFactory: React.PropTypes.func
 
   },
 
@@ -52,7 +54,18 @@ var TreeNode = React.createClass({
       },
       checked : false,
       expandIconClass: "",
-      collapseIconClass: ""
+      collapseIconClass: "",
+      labelFactory: function (labelClassName, displayLabel) {
+        return <label className={labelClassName}>{displayLabel}</label>;
+      },
+      checkboxFactory: function (className, isChecked) {
+        return (
+          <input
+          className={className}
+          type="checkbox"
+          checked={isChecked}
+          onChange={noop}/>);
+      }
     }
   },
   
@@ -145,18 +158,14 @@ var TreeNode = React.createClass({
 
     if (props.labelFilter) displayLabel = props.labelFilter(displayLabel);
 
-    return <label className={labelClassName}>{displayLabel}</label>;
+    return this.props.labelFactory(labelClassName, displayLabel, this._getLineage());
   },
 
   _getCheckboxNode: function () {
     var props = this.props;
     if (!props.checkbox) return null;
 
-    return <input
-      className={props.classNamePrefix + "-node-checkbox"}
-      type="checkbox"
-      checked={this._isChecked()}
-      onChange={noop}/>;
+    return this.props.checkboxFactory(props.classNamePrefix + "-node-checkbox", this._isChecked(), this._getLineage());
   },
 
   _isStateful: function () {

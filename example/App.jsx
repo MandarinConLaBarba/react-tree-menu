@@ -117,7 +117,8 @@ var App = React.createClass({
       statefulExample = this._getExamplePanel("Stateful", this._getStatefulTreeExample()),
       dynamicExample2 = this._getExamplePanel("Dynamic (Object)", this._getDynamicTreeExample2()),
       dynamicExample3 = this._getExamplePanel("Selection w/o Checkboxes", this._getDynamicTreeExample3()),
-      labelFilterExample = this._getExamplePanel("Label Filter", this._getLabelFilterExample());
+      labelFilterExample = this._getExamplePanel("Label Filter", this._getLabelFilterExample()),
+      rendererExample = this._getExamplePanel("Label/Checkbox Renderers", this._getRendererExample());
 
     return <div className="container">
 
@@ -235,6 +236,12 @@ var App = React.createClass({
             <li>This menu has a labelFilter prop that truncates the displayed label</li>
           </ul>
         </div>
+        <div className="col-lg-3">
+          <h2>Renderers</h2>
+          <ul>
+            <li>Using renderer (node factory) methods as arguments</li>
+          </ul>
+        </div>
 
       </div>
 
@@ -247,6 +254,9 @@ var App = React.createClass({
         </div>
         <div className="col-lg-3">
           {labelFilterExample}
+        </div>
+        <div className="col-lg-3">
+          {rendererExample}
         </div>
       </div>
 
@@ -377,6 +387,40 @@ var App = React.createClass({
         <TreeNode label="Option 2 also has a long name" id="option_2">
           <TreeNode label="Option A with a long name" checkbox={true} id="option_2.a"/>
           <TreeNode label="Option B with a long name" checkbox={true} id="option_2.b"/>
+        </TreeNode>
+        <TreeNode label="Option 3 with a long name" id="option_3"/>
+        <TreeNode label="Option 4 with a long name" id="option_4"/>
+      </TreeMenu>
+    );
+  },
+
+  _getRendererExample: function () {
+
+    return (
+      <TreeMenu
+        identifier="id"
+        onTreeNodeClick={function() {}}
+        onTreeNodeCollapseChange={function() {}}
+        onTreeNodeCheckChange={function() {}}
+        collapsible={false}
+        labelFilter={function(label) {
+          var max = 10;
+          if (label.length <= max) return label;
+
+          return label.substring(label, max).concat("...");
+        }}
+        labelFactory={function(labelClassName, displayLabel) {
+          return <span className={labelClassName}>{displayLabel} {"<span/>"}</span>;
+        }}
+        checkboxFactory={function(checkboxClassName, isChecked) {
+          return <span className={checkboxClassName + " fa " + (isChecked ? "fa-check-circle" : "fa-circle-o")}></span>;
+        }}
+        expandIconClass="fa fa-chevron-right"
+        collapseIconClass="fa fa-chevron-down">
+        <TreeNode label="Option 1 with a long name" id="option_1"/>
+        <TreeNode label="Option 2 also has a long name" id="option_2" checkbox={true} checked={false}>
+          <TreeNode label="Option A with a long name" checkbox={true} id="option_2.a"/>
+          <TreeNode label="Option B with a long name" checkbox={true} checked={true} id="option_2.b"/>
         </TreeNode>
         <TreeNode label="Option 3 with a long name" id="option_3"/>
         <TreeNode label="Option 4 with a long name" id="option_4"/>

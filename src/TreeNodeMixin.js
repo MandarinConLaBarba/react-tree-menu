@@ -1,3 +1,6 @@
+var pick = require('lodash/object/pick'),
+  extend = require('lodash/object/assign');
+
 var TreeNodeMixin = {
 
   /**
@@ -15,22 +18,23 @@ var TreeNodeMixin = {
 
     //TODO: use omit/pick to clean this up
 
-    return {
-      classNamePrefix: rootProps.classNamePrefix,
-      collapseIconClass: rootProps.collapseIconClass,
-      expandIconClass: rootProps.expandIconClass,
-      collapsible: rootProps.collapsible,
+    return extend({
       ancestor: ancestor,
-      stateful: rootProps.stateful,
       onClick: rootProps.onTreeNodeClick,
       onCheckChange: rootProps.onTreeNodeCheckChange,
       onSelectChange: rootProps.onTreeNodeSelectChange,
       onCollapseChange: rootProps.onTreeNodeCollapseChange,
-      labelFilter: rootProps.labelFilter,
       id: this.getNodeId(rootProps, props, childIndex),
       key: "tree-node-" + ancestor.join(".") + childIndex
-    };
-
+    }, pick(rootProps,
+      "classNamePrefix",
+      "collapseIconClass",
+      "expandIconClass",
+      "collapsible",
+      "stateful",
+      "labelFilter",
+      "checkboxFactory",
+      "labelFactory"));
   },
 
   getNodeId: function (rootProps, props, childIndex) {

@@ -32,7 +32,9 @@ var TreeMenu = React.createClass({
       React.PropTypes.array,
       React.PropTypes.object
     ]),
-    labelFilter: React.PropTypes.func
+    labelFilter: React.PropTypes.func,
+    labelFactory: React.PropTypes.func,
+    checkboxFactory: React.PropTypes.func
   },
 
   getDefaultProps: function () {

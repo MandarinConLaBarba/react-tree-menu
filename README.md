@@ -152,6 +152,14 @@ The CSS class to give the collapse icon component. Empty by default
 
 A function that can be used to filter/transform the label. Empty by default
 
+### `labelFactory={<Function>}`
+
+A factory function that returns a label node. See example source for usage.
+
+### `checkboxFactory={<Function>}`
+
+A factory function that returns a checkbox node. See example source for usage.
+
 ### `onTreeNodeClick={<Function>}`
 
 Function handler for click event on <TreeNode /> components. If the `TreeNode` has an `onTreeNodeSelectChange` handler, this is not fired. See [Callback API](#callback-api-for-treemenu-event-handler-props). Defaults to noop.
