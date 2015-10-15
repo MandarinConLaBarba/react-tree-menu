@@ -1,5 +1,6 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var App = require('./App.jsx');
 
 
-React.render(<App/>, document.getElementsByTagName('body')[0]);
+ReactDOM.render(<App/>, document.getElementById('appContainer'));

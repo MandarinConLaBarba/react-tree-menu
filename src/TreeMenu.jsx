@@ -4,7 +4,7 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   clone = require('lodash/lang/clone'),
   omit = require('lodash/object/omit'),
-  invariant = require('react/lib/invariant'),
+  invariant = require('invariant'),
   assign = require('object-assign'),
   map = require('lodash/collection/map');
 

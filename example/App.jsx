@@ -1,12 +1,11 @@
-var React = require('react/addons'),
+var React = require('react'),
   TreeMenu = require('../index'),
   TreeNode = require('../index').TreeNode,
   TreeMenuUtils = require('../index').Utils,
   Immutable = require('immutable'),
-  _ = require('lodash'),
-  JSXView = require('react-jsx-view');
+  _ = require('lodash');
 
-var CSSTransitionGroup = React.addons.CSSTransitionGroup;
+var CSSTransitionGroup = require('react-addons-css-transition-group');
 
 var App = React.createClass({
 
@@ -188,26 +187,28 @@ var App = React.createClass({
 
       <div className="row">
         <div className="col-lg-3">
-          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+          <CSSTransitionGroup
+            transitionEnterTimeout={500}
+            transitionName="last-action" transitionLeave={false}>
             {this._getLastActionNode("1")}
           </CSSTransitionGroup>
         </div>
 
         <div className="col-lg-3">
-          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+          <CSSTransitionGroup transitionEnterTimeout={500} transitionName="last-action" transitionLeave={false}>
             {this._getLastActionNode("2")}
           </CSSTransitionGroup>
 
         </div>
 
         <div className="col-lg-3">
-          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+          <CSSTransitionGroup transitionEnterTimeout={500} transitionName="last-action" transitionLeave={false}>
             {this._getLastActionNode("3")}
           </CSSTransitionGroup>
         </div>
 
         <div className="col-lg-3">
-          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+          <CSSTransitionGroup transitionEnterTimeout={500} transitionName="last-action" transitionLeave={false}>
             {this._getLastActionNode("4")}
           </CSSTransitionGroup>
         </div>
@@ -262,12 +263,12 @@ var App = React.createClass({
 
       <div className="row">
         <div className="col-lg-3">
-          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+          <CSSTransitionGroup transitionEnterTimeout={500} transitionName="last-action" transitionLeave={false}>
             {this._getLastActionNode("5")}
           </CSSTransitionGroup>
         </div>
         <div className="col-lg-3">
-          <CSSTransitionGroup transitionName="last-action" transitionLeave={false}>
+          <CSSTransitionGroup transitionEnterTimeout={500} transitionName="last-action" transitionLeave={false}>
             {this._getLastActionNode("6")}
           </CSSTransitionGroup>
         </div>

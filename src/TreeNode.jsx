@@ -1,4 +1,4 @@
-var React = require('react/addons'),
+var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   noop = require('lodash/utility/noop');
 
@@ -129,7 +129,7 @@ var TreeNode = React.createClass({
     if (this._isStateful()) {
       var state = this.state;
       children = React.Children.map(props.children, function (child) {
-        return React.addons.cloneWithProps(child, {
+        return React.cloneElement(child, {
           key: child.key,
           ref: child.ref,
           checked : state.checked

@@ -1,6 +1,6 @@
 {
   "name": "react-tree-menu",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "A tree menu component for React",
   "main": "index.js",
   "keywords": [
@@ -14,11 +14,12 @@
     "example": "example"
   },
   "dependencies": {
+    "invariant": "^2.1.1",
     "lodash": "^3.2.0",
     "object-assign": "^2.0.0"
   },
   "peerDependencies": {
-    "react": ">=0.12.2"
+    "react": ">=0.14.0"
   },
   "repository": {
     "type": "git",
@@ -28,10 +29,10 @@
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.3.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-jest": "^0.1.2",
     "immutable": "^3.6.2",
-    "react": "^0.13.2",
-    "react-jsx-view": "^1.0.3",
+    "react": "^0.14.0",
+    "react-addons-css-transition-group": "^0.14.0",
+    "react-dom": "^0.14.0",
     "reactify": "^1.0.0"
   },
   "scripts": {

@@ -22,7 +22,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-jest');
 
   grunt.registerTask('bundle-example', ['browserify:example']);
 };
