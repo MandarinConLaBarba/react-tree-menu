@@ -190,8 +190,10 @@ var TreeNode = React.createClass({
 
   _isCollapsed: function () {
 
+    if (this._isStateful() && typeof this.state.collapsed !== "undefined") return this.state.collapsed;
+
     if (!this.props.collapsible) return false;
-    if (this._isStateful() && this.state.collapsed) return true;
+
     return this.props.collapsed;
 
   },

@@ -1,6 +1,6 @@
 {
   "name": "react-tree-menu",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "A tree menu component for React",
   "main": "index.js",
   "keywords": [
