@@ -4,6 +4,7 @@ var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
   clone = require('lodash/lang/clone'),
   omit = require('lodash/object/omit'),
+  sortBy = require('lodash/collection/sortBy'),
   invariant = require('invariant'),
   assign = require('object-assign'),
   map = require('lodash/collection/map');
@@ -34,7 +35,11 @@ var TreeMenu = React.createClass({
     ]),
     labelFilter: React.PropTypes.func,
     labelFactory: React.PropTypes.func,
-    checkboxFactory: React.PropTypes.func
+    checkboxFactory: React.PropTypes.func,
+    sort: React.PropTypes.oneOfType([
+      React.PropTypes.bool,
+      React.PropTypes.function
+    ])
   },
 
   getDefaultProps: function () {
@@ -101,6 +106,7 @@ var TreeMenu = React.createClass({
 
     var thisComponent = this;
 
+
     function dataToNodes(data, ancestor) {
 
       var isRootNode = false;
@@ -109,7 +115,7 @@ var TreeMenu = React.createClass({
         ancestor = [];
       }
 
-      return map(data, function(dataForNode, i) {
+      var nodes = map(data, function(dataForNode, i) {
 
         var nodeProps = omit(dataForNode, ["children", "onClick", "onCheckChange"]),
           children = [];
@@ -125,6 +131,15 @@ var TreeMenu = React.createClass({
         return TreeNodeFactory(nodeProps, children);
 
       });
+
+      var sort = thisComponent.props.sort;
+
+      if (sort) {
+        var sorter = typeof sort === "boolean" ? function (node) { return node.props.label } : sort;
+        nodes = sortBy(nodes, sorter);
+      }
+
+      return nodes;
 
     }
 

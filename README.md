@@ -123,6 +123,16 @@ See the [example CSS](example/tree-view.css) for how this works.
 
 ## `<TreeMenu/>` Props
 
+### `sort={<Boolean> || <Function>}`
+
+* If sort is a `Boolean` and true (i.e. `<TreeMenu sort ... />`), the node label will be used for sorting.
+* If sort is a `Function`, it will be used as the sort function, with the argument the `React` element (props are available for sorting). Example:
+
+```
+<TreeMenu sort={(node) => node.props.value} ... />
+```
+
+
 ### `stateful={<Boolean>}`
 
 If you need it, you can make `<TreeMenu/`> keep track of its own state. That being said, `react-tree-menu` was designed to

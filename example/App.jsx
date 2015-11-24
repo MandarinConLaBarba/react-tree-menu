@@ -349,6 +349,7 @@ var App = React.createClass({
 
     return (
       <TreeMenu
+        sort
         identifier="id"
         onTreeNodeClick={this._setLastActionState.bind(this, "clicked", "2")}
         onTreeNodeCollapseChange={this._handleDeclarativeTreeNodePropChange.bind(this, "collapsed")}
@@ -358,8 +359,8 @@ var App = React.createClass({
         collapseIconClass="fa fa-chevron-down">
         <TreeNode label="Option 1" id="option_1"/>
         <TreeNode label="Option 2" id="option_2">
-          <TreeNode label="Option A" checkbox={true} checked={this.state.staticTreeData["option_2.a"].checked} id="option_2.a"/>
           <TreeNode label="Option B" checkbox={true} checked={this.state.staticTreeData["option_2.b"].checked} id="option_2.b"/>
+          <TreeNode label="Option A" checkbox={true} checked={this.state.staticTreeData["option_2.a"].checked} id="option_2.a"/>
         </TreeNode>
         <TreeNode label="Option 3" id="option_3"/>
         <TreeNode label="Option 4" id="option_4"/>
