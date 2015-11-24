@@ -358,9 +358,8 @@ var App = React.createClass({displayName: "App",
         collapsible: false, 
         expandIconClass: "fa fa-chevron-right", 
         collapseIconClass: "fa fa-chevron-down"}, 
-        React.createElement(TreeNode, {label: "B Option 1", id: "option_1"}), 
-        React.createElement(TreeNode, {label: "C Option 2", id: "option_2"}, 
-          React.createElement(TreeNode, {label: "Option A", checkbox: true, checked: this.state.staticTreeData["option_2.a"].checked, id: "option_2.a"}), 
+        React.createElement(TreeNode, {label: "Option 1", id: "option_1"}), 
+        React.createElement(TreeNode, {label: "Option 2", id: "option_2"}, 
           React.createElement(TreeNode, {label: "Option B", checkbox: true, checked: this.state.staticTreeData["option_2.b"].checked, id: "option_2.b"}), 
           React.createElement(TreeNode, {label: "Option A", checkbox: true, checked: this.state.staticTreeData["option_2.a"].checked, id: "option_2.a"})
         ), 
@@ -39321,17 +39320,8 @@ var TreeMenu = React.createClass({displayName: "TreeMenu",
       var sort = thisComponent.props.sort;
 
       if (sort) {
-
         var sorter = typeof sort === "boolean" ? function (node) { return node.props.label } : sort;
-
         nodes = sortBy(nodes, sorter);
-        //if (typeof sort === "boolean") {
-        //  nodes = sortBy(nodes, function (node) {
-        //    return node.props.label;
-        //  });
-        //} else {
-        //  nodes = sortBy(nodes, sort);
-        //}
       }
 
       return nodes;

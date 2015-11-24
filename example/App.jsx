@@ -235,12 +235,14 @@ var App = React.createClass({
           <h2>Label Filter</h2>
           <ul>
             <li>This menu has a labelFilter prop that truncates the displayed label</li>
+            <li>NOTE: no event handlers attached for this example</li>
           </ul>
         </div>
         <div className="col-lg-3">
           <h2>Renderers</h2>
           <ul>
             <li>Using renderer (node factory) methods as arguments</li>
+            <li>NOTE: no event handlers attached for this example</li>
           </ul>
         </div>
 
