@@ -16,6 +16,7 @@ var TreeNode = React.createClass({
 
     stateful: React.PropTypes.bool,
     checkbox: React.PropTypes.bool,
+    isRadio: React.PropTypes.bool,
     collapsible : React.PropTypes.bool,
     collapsed : React.PropTypes.bool,
     expandIconClass: React.PropTypes.string,
@@ -58,11 +59,12 @@ var TreeNode = React.createClass({
       labelFactory: function (labelClassName, displayLabel) {
         return <label className={labelClassName}>{displayLabel}</label>;
       },
-      checkboxFactory: function (className, isChecked) {
+      checkboxFactory: function (className, isChecked, isRadio) {
+        var type = (isRadio ? "radio" : "checkbox")
         return (
           <input
           className={className}
-          type="checkbox"
+          type= {type}
           checked={isChecked}
           onChange={noop}/>);
       }
@@ -165,7 +167,7 @@ var TreeNode = React.createClass({
     var props = this.props;
     if (!props.checkbox) return null;
 
-    return this.props.checkboxFactory(props.classNamePrefix + "-node-checkbox", this._isChecked(), this._getLineage());
+    return this.props.checkboxFactory(props.classNamePrefix + "-node-checkbox", this._isChecked(), this._isRadio(), this._getLineage() );
   },
 
   _isStateful: function () {
@@ -178,6 +180,13 @@ var TreeNode = React.createClass({
 
     if (this._isStateful() && typeof this.state.checked !== "undefined") return this.state.checked;
     return this.props.checked;
+
+  },
+
+  _isRadio: function () {
+
+    if (this._isStateful() && typeof this.state.isRadio !== "undefined") return this.state.isRadio;
+    return this.props.isRadio;
 
   },
 
