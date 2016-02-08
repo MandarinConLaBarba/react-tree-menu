@@ -64,6 +64,7 @@ var TreeNode = React.createClass({
         return (
           <input
           className={className}
+		  name= "treenode"
           type= {type}
           checked={isChecked}
           onChange={noop}/>);
