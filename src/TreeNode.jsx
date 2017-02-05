@@ -1,6 +1,6 @@
 var React = require('react'),
   TreeNodeMixin = require('./TreeNodeMixin'),
-  noop = require('lodash/utility/noop');
+  noop = require('lodash/noop');
 
 /**
  * Individual nodes in tree hierarchy, nested under a single <TreeMenu/> node

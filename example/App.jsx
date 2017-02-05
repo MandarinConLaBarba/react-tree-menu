@@ -1,7 +1,7 @@
 var React = require('react'),
-  TreeMenu = require('../index'),
-  TreeNode = require('../index').TreeNode,
-  TreeMenuUtils = require('../index').Utils,
+  TreeMenu = require('../src/index'),
+  TreeNode = require('../src/index').TreeNode,
+  TreeMenuUtils = require('../src/index').Utils,
   Immutable = require('immutable'),
   _ = require('lodash');
 
