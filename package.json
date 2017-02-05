@@ -41,7 +41,7 @@
     "webpack-validator": "^2.2.2"
   },
   "scripts": {
-    "prepublish": "npm run lib",
+    "prepublish": "npm run bundle && npm run lib",
     "lib": "rimraf lib && babel src -d lib",
     "watch": "webpack-dev-server",
     "bundle": "webpack",

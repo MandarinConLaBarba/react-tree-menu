@@ -296,6 +296,16 @@ This value is overridden by the `collapsible` prop value set on the root `<TreeM
 
 If the node is collapsible, whether or not the node is collapsed. Defaults to false.
 
+## Development
+
+`npm run watch` - For local development, run the example from localhost with live reloading of change. Then load up http://localhost:8080/ to see the code in example/ in your browser.
+
+`npm run lib` - Update the precompiled code in lib/ with changes to src/
+
+`npm run bundle` - Update the example/bundle.js for the example
+
+`npm run prepublish` - Update both the precompiled code in lib/ and example/bundle.js
+
 
 
 
