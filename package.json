@@ -1,6 +1,6 @@
 {
   "name": "react-tree-menu",
-  "version": "1.5.0",
+  "version": "1.5.2",
   "description": "A tree menu component for React",
   "main": "index.js",
   "keywords": [
@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "invariant": "^2.1.1",
-    "lodash": "^3.2.0",
-    "object-assign": "^2.0.0"
+    "lodash": "^4.0.0",
+    "object-assign": "^4.1.1"
   },
   "peerDependencies": {
     "react": ">=0.14.0"
@@ -26,22 +26,28 @@
     "url": "git://github.com/MandarinConLaBarba/react-tree-menu"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^3.3.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "immutable": "^3.6.2",
-    "react": "^0.14.0",
-    "react-addons-css-transition-group": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "reactify": "^1.0.0"
+    "babel-cli": "^6.10.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-react-hmre": "^1.1.1",
+    "create-react-class": "^15.6.2",
+    "immutable": "^3.8.2",
+    "prop-types": "^15.6.0",
+    "react": "^15.6.2",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-dom": "^15.6.2",
+    "react-hot-loader": "^1.3.0",
+    "rimraf": "^2.6.2",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-validator": "^2.2.2"
   },
   "scripts": {
+    "prepublish": "npm run bundle && npm run lib",
+    "lib": "rimraf lib && babel src -d lib",
+    "watch": "webpack-dev-server",
+    "bundle": "webpack",
     "test": "jest"
-  },
-  "browserify": {
-    "transform": [
-      "reactify"
-    ]
   },
   "author": "Mandarin Drummond",
   "license": "MIT"

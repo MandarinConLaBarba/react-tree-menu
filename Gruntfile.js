@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         src: ['example/boot.jsx'],
         dest: 'example/bundle.js',
         options: {
-          transform: ['reactify']
+          transform: ['babelify']
         }
       }
     }
